@@ -155,7 +155,7 @@ def get_context_strings(context_resume=None, context_job=None,):
     # template_assistant = "You are a helpful assistant data scientist who uses NLP analysis of customer reviews to inform business-decision-making:"
     # product_template = f" Assume all user questions are asking about the content in the user reviews. Note the product metadata is:\n```{product_string}```\n\n"
     # template_starter = get_template_string()
-    context = f"Here is my resume ```{context_resume}```.\n\n Here is the job listing:```{context_job}."
+    context = f"\nHere is my resume: \n\n-------------\n {context_resume}.\n\n Here is the job listing:\n\n-------------\n{context_job}.\n\n"
     # context += f"Use the {context_type} first before using the retrieved documents."
     # template_assistant=template_starter+ context
     return context
@@ -241,6 +241,26 @@ with output_container:
 
 
         # print_history(st.session_state['llm'])
+    
+def download_history():
+        
+    avatar_dict = {'human': user_avatar,
+                   'ai':ai_avatar,
+                   'SystemMessage':"💻"}
+    
+    md_history = []
+    history = st.session_state['llm'].memory.buffer_as_messages
+    for msg in history:
+        type_message = msg.type#type(msg) x
+            # with st.chat_message(name=i["role"],avatar=avatar_dict[ i['role']]):
+        md_history.append(f"{avatar_dict[type_message]}: {msg.content}")
+    return "\n\n".join(md_history)
+    # if submit_button:
+    
+# chat_options.markdown("**Clear conversation history.**")
+
+# reset_button  = chat_options.button("Clear",on_click=reset)
+st.download_button("Download history?", file_name="chat-history.txt", data=download_history())#data=json.dumps(st.session_state['history']))
 
     
 # if uploaded_file is not None:

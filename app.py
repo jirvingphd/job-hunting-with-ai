@@ -1,6 +1,7 @@
 import streamlit as st
 # from langchain import LangChain
-import PyPDF2
+# import PyPDF2
+import pypdf2 as PyPDF2
 from io import StringIO
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage, AIMessage

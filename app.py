@@ -10,6 +10,8 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferWindowMemory
 import os
 
+st.set_page_config(page_title="Resume and Job Listing Analyzer", page_icon="📄", layout="wide")
+
 def read_pdf(file):
     
     # stringio = StringIO(file.getvalue().decode("utf-8"))
@@ -75,7 +77,7 @@ def get_template_string():
 
 st.sidebar.divider()
 st.sidebar.header("GPT Model")
-model_type = st.sidebar.radio("GPT Model", options=["gpt-3.5-turbo-0125", "gpt-3.5-turbo-instruct"],#,"gpt-4-0125-preview"],
+model_type = st.sidebar.radio("GPT Model", options=["gpt-3.5-turbo-0125", "gpt-3.5-turbo-instruct","gpt-4-turbo-preview"],
                               index=0)
 
 def get_llm(model_type=model_type, temperature=0.1, #verbose=False,

@@ -10,7 +10,7 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferWindowMemory
 import os
 
-st.set_page_config(page_title="Resume and Job Listing Analyzer", page_icon="📄", layout="wide")
+st.set_page_config(page_title="Resume and Job Listing Analyzer", page_icon="💼")#, layout="wide")
 
 def read_pdf(file):
     

@@ -58,7 +58,7 @@ st.sidebar.markdown('> Upload your resume and the job listing to get started')
 resume_container   =    st.sidebar.expander("Resume", expanded=False)#st.sidebar.container(border=True)
 # st.sidebar.header("Job Listing")
 job_listing_container = st.sidebar.expander("Job Listing", expanded=False)#st.sidebar.container(border=True)
-
+st.sidebar.divider()
 ## Upload pdf or paste resume
 with resume_container:
     st.session_state.resume_file = st.file_uploader("Upload your PDF resume", type="pdf", accept_multiple_files=False)

@@ -10,6 +10,8 @@ from langchain.prompts import  MessagesPlaceholder, PromptTemplate, ChatPromptTe
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferWindowMemory
 import os
+from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
+
 
 st.set_page_config(page_title="Resume and Job Listing Analyzer", page_icon="💼")#, layout="wide")
 
@@ -36,14 +38,17 @@ def read_pdf(file):
 if 'resume_file' not in st.session_state: 
     st.session_state.resume_file = None
 
-# if 'resume_text' not in st.session_state:
-#     st.session_state.resume_text = None
+if 'resume_text' not in st.session_state:
+    st.session_state.resume_text = ''
     
 if 'job_listing_file' not in st.session_state:    
     st.session_state.job_listing_file = None
 
-# if 'job_text' not in st.session_state:
-#     st.session_state.job_text = None
+if "history" not in st.session_state:
+    st.session_state['history'] = []
+
+if 'job_text' not in st.session_state:
+    st.session_state.job_text = ''
 
 st.title('Resume and Job Listing Analyzer')
 
@@ -95,10 +100,10 @@ with job_listing_container:
 
 ## Set resume text
 if submit_resume:
-    if st.session_state.resume_file is not None:
-        st.session_state.resume_text = read_pdf(st.session_state.resume_file)
-    elif st.session_state.pasted_resume is not None:
+    if st.session_state.pasted_resume is not None:
         st.session_state.resume_text = st.session_state.pasted_resume
+    elif st.session_state.resume_file is not None:
+        st.session_state.resume_text = read_pdf(st.session_state.resume_file) 
     else:
         st.error("Please upload a resume or paste it in the text area.")
     # else:  
@@ -108,11 +113,14 @@ if submit_resume:
 
 
 ## set job listing text
-
-if st.session_state.job_listing_file:
-    st.session_state.job_text = read_pdf(st.session_state.job_listing_file)
-if st.session_state.pasted_job_listing:
-    st.session_state.job_text = st.session_state.pasted_job_listing
+if submit_job:
+    if st.session_state.job_listing_file:
+        st.session_state.job_text = read_pdf(st.session_state.job_listing_file)
+    elif st.session_state.pasted_job_listing:
+        st.session_state.job_text = st.session_state.pasted_job_listing
+    else:
+        st.error("Please upload a job listing or paste it in the text area.")
+        # st.session_state.job_text = None
 # else:
 #     st.session_state.job_text = ''
 
@@ -153,37 +161,69 @@ def get_system_prompt_str():
 #     return final_prompt_template
 
 
-def get_llm(model_type=model_type, temperature=0.1,
-            system_prompt_template_func= get_system_prompt_str,#verbose=False,
-             verbose=True, sector="data science and analytics", resume='', job=''):
-    """Version 2.0"""
+# def get_llm(model_type=model_type, temperature=0.1,
+#             system_prompt_template_func= get_system_prompt_str,#verbose=False,
+#              verbose=True, sector="data science and analytics", resume='', job=''):
+#     """Version 2.0"""
     
-    ## get prompt string
-    system_prompt = system_prompt_template_func()
-    final_promp_str = system_prompt + """
-        Current conversation:
-        {history}
-        Human: {input}
-        AI:"""
+#     ## get prompt string
+#     system_prompt = system_prompt_template_func()
+#     final_promp_str = system_prompt + """
+#         Current conversation:
+#         {history}
+#         Human: {input}
+#         AI:"""
         
-    final_prompt_template = ChatPromptTemplate.from_template(final_promp_str)
-    final_prompt_template = final_prompt_template.partial(sector=sector, resume=resume, job=job)
+#     final_prompt_template = ChatPromptTemplate.from_template(final_promp_str)
+#     final_prompt_template = final_prompt_template.partial(sector=sector, resume=resume, job=job)
+        
+#     llm = ChatOpenAI(temperature=temperature, model=model_type)
+    
+#     llm_chain = ConversationChain(prompt=final_prompt_template, 
+#                                   llm=llm, 
+#                                   memory=ConversationBufferWindowMemory(memory_key='history',
+#                                                                         human_prefix="Human",
+#                                                                         ai_prefix="AI",
+#                                                                         k=3),
+#                                   verbose=verbose, 
+#                                 #   input_key="input",
+#                                   output_key="response")#,#callbacks=callbacks)
+    
+#     return llm_chain
+
+
+def get_llm_no_memory(model_type="gpt-3.5-turbo-0125", temperature=0.1, #
+            system_prompt_template_func= get_system_prompt_str,#verbose=False,
+             verbose=True, sector="data science and analytics"):#, resume='', job=''):
+    """Version 2.0"""
+    # ## get prompt string
+    system_prompt = system_prompt_template_func()
+    # final_promp_str = system_prompt + """
+    #     Current conversation:
+    #     {history}
+    #     Human: {input}
+    #     AI:"""
+        
+    # final_prompt_template = ChatPromptTemplate.from_template(final_promp_str)
+    final_prompt_template = ChatPromptTemplate.from_messages([
+        ('system',system_prompt),
+         MessagesPlaceholder(variable_name='history', optional=True),
+         ('human', '{input}'),
+    ])
+    final_prompt_template = final_prompt_template.partial(sector=sector)#, resume=resume, job=job)
         
     llm = ChatOpenAI(temperature=temperature, model=model_type)
     
-    llm_chain = ConversationChain(prompt=final_prompt_template, 
-                                  llm=llm, 
-                                  memory=ConversationBufferWindowMemory(memory_key='history',
-                                                                        human_prefix="Human",
-                                                                        ai_prefix="AI",
-                                                                        k=3),
-                                  verbose=verbose, 
-                                #   input_key="input",
-                                  output_key="response")#,#callbacks=callbacks)
+    
+    llm_chain = final_prompt_template | llm | StrOutputParser(output_key="response")
+    # llm_chain = ConversationChain(prompt=final_prompt_template, 
+    #                               llm=llm, 
+    #                               memory=None, 
+    #                               verbose=verbose, 
+    #                             #   input_key="input",
+    #                               output_key="response")#,#callbacks=callbacks)
     
     return llm_chain
-
-
             
             
 # def reset_agent(#fpath_db = FPATHS['data']['app']['vector-db_dir'],
@@ -206,22 +246,47 @@ def fake_streaming(response):
         time.sleep(.05)		
         
             
+
+def get_response(llm_no_mem, input, resume='', job='', history=[]):
+    output = llm_no_mem.invoke({'input':input,
+                   'resume':resume,
+                   'job':job,
+                   'history':history,})
+
+    # response = llm_no_mem.invoke({"resume":resume,
+    #                               "job":job,
+    #                               'input':input_text,
+    #                               'history':history})
     
+    if isinstance(output, dict):
+        response = output['response']
+    else:
+        response = output
+    history.append(HumanMessage(content=input))
+    history.append(AIMessage(response))
+    return response, history
+    
+    
+        
 ## For steramlit try this as raw code, not a function
 def print_history(llm_chain):
     # Simulate streaming for final message
-
-    session_state_messages = llm_chain.memory.buffer_as_messages
-    for msg in session_state_messages:#[:-1]:
+    if isinstance(llm_chain, ConversationChain):
+        session_state_messages = llm_chain.memory.buffer_as_messages
+    elif isinstance(llm_chain, list):
+        session_state_messages = llm_chain
+    else:
+        session_state_messages=[]
+        
+    for msg in session_state_messages:
         if isinstance(msg, AIMessage):
             # notebook
-            print(f"Assistant: {msg.content}")
             # streamlit
             st.chat_message("assistant", avatar=ai_avatar).write(msg.content)
         
         elif isinstance(msg, HumanMessage):
             # notebook
-            print(f"User: {msg.content}")
+            # print(f"User: {msg.content}")
             # streamlit
             st.chat_message("user", avatar=user_avatar).write(msg.content)
         print()
@@ -262,7 +327,7 @@ menu_container = st.container(border=True)
 
 chat_container = st.container()
 # chat_container.header("Q&A")
-output_container = chat_container.container(border=True)
+output_container = chat_container.container(border=True, height=400)
 user_text = chat_container.chat_input(placeholder="Enter your question here.")
 
 ai_avatar  = "🤖"
@@ -299,31 +364,43 @@ with sub_chat_menu:
 reset_button1 = st.sidebar.button("Reset Chat?")
 if ('llm' not in st.session_state) or reset_button1 or reset_button2:
     # agent = get_agent(retriever)
-    with output_container:
-        st.session_state['llm'] = get_llm()#reset_agent(retriever=retriever)#st.session_state['retriever'] )
+    # with output_container:
+    st.session_state['history'] = []
+    st.session_state['llm'] = get_llm_no_memory(model_type=model_type,)#reset_agent(retriever=retriever)#st.session_state['retriever'] )
 
 
 # with chat_container:
 # output_container = st.container(border=True)
 with output_container:
         
-    print_history(st.session_state['llm'])
-    if user_text:
-        st.chat_message("user", avatar=user_avatar).write(user_text)
-    
-        response = st.session_state['llm'].invoke({"input":user_text})
-        st.chat_message('assistant', avatar=ai_avatar).write(fake_streaming(response['response']))
-
+    print_history(st.session_state['history'])#st.session_state['llm'])
     if get_answer_with_context:
-        prompt_text =  task_options[selected_task]
-        st.chat_message("user", avatar=user_avatar).write(prompt_text)
-        response = st.session_state['llm'].invoke({'input':prompt_text})
+        user_text = task_options[selected_task]
+        
+    if user_text is not None:
+        st.chat_message("user", avatar=user_avatar).write(user_text)
+
+        response, history = get_response(st.session_state['llm'], input=user_text,
+                                         resume=st.session_state.resume_text,
+                                         job = st.session_state.job_text,
+                                         history=st.session_state['history'])
+        st.session_state['history']  = history
+        # response = st.session_state['llm'].invoke({"input":user_text})
+        st.chat_message('assistant', avatar=ai_avatar).write(fake_streaming(response))#response['response']))
+
+
+    # if get_answer_with_context:
+    #     user_text = task_options[selected_task]
+    #     raise Exception("CONTINUE HERE")
+    #     prompt_text =  task_options[selected_task]
+    #     st.chat_message("user", avatar=user_avatar).write(prompt_text)
+    #     response = st.session_state['llm'].invoke({'input':prompt_text})
 
         
-        # print_history(st.session_state['agent-summarize'])
+    #     # print_history(st.session_state['agent-summarize'])
 
-        # response = st.session_state['agent'].invoke({"input":prompt_text})
-        st.chat_message('assistant', avatar=ai_avatar).write(fake_streaming(response['response']))
+    #     # response = st.session_state['agent'].invoke({"input":prompt_text})
+    #     st.chat_message('assistant', avatar=ai_avatar).write(fake_streaming(response['response']))
 
 
         # print_history(st.session_state['llm'])
@@ -335,7 +412,8 @@ def download_history():
                    'SystemMessage':"💻"}
     
     md_history = []
-    history = st.session_state['llm'].memory.buffer_as_messages
+    # history = st.session_state['llm'].memory.buffer_as_messages
+    history = st.session_state['history']
     for msg in history:
         type_message = msg.type#type(msg) x
             # with st.chat_message(name=i["role"],avatar=avatar_dict[ i['role']]):

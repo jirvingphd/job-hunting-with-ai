@@ -33,14 +33,17 @@ def read_pdf(file):
     return text
 
 ## Initialize session state
-if 'resume_file' not in st.session_state:
-    
+if 'resume_file' not in st.session_state: 
     st.session_state.resume_file = None
-    st.session_state.resume_text = None
 
+# if 'resume_text' not in st.session_state:
+#     st.session_state.resume_text = None
+    
 if 'job_listing_file' not in st.session_state:    
     st.session_state.job_listing_file = None
-    st.session_state.job_text = None
+
+# if 'job_text' not in st.session_state:
+#     st.session_state.job_text = None
 
 st.title('Resume and Job Listing Analyzer')
 
@@ -63,31 +66,55 @@ job_listing_container = st.sidebar.expander("Job Listing", expanded=False)#st.si
 st.sidebar.divider()
 ## Upload pdf or paste resume
 with resume_container:
-    st.session_state.resume_file = st.file_uploader("Upload your PDF resume", type="pdf", accept_multiple_files=False)
-    st.session_state.pasted_resume = st.text_area("or paste your resume here:", height=100)
+    resume_form =st.form(key='resume_form')
+    
+    with resume_form:
+        st.session_state.resume_file = st.file_uploader("Upload your PDF resume", type="pdf", accept_multiple_files=False)
+    
+        # Pasted Version
+        st.session_state.pasted_resume = st.text_area("or paste your resume here:")
+        submit_resume = st.form_submit_button("Update resume.")
+    # st.session_state.pasted_resume = st.text_area("or paste your resume here:", height=100,)
+
+
 
 ## Upload pdf or past job listing    
 with job_listing_container:
-    st.session_state.job_listing_file = st.file_uploader("Upload the PDF job listing", type="pdf", accept_multiple_files=False)
-    st.session_state.pasted_job_listing = st.text_area("Paste the job listing here", height=100)    
+    job_form =st.form(key='job_form')
+
+    with job_form:
+        
+        st.session_state.job_listing_file = st.file_uploader("Upload the PDF job listing", type="pdf", accept_multiple_files=False)
+        # Pasted version
+        st.session_state.pasted_job_listing = st.text_area("Paste the job listing here", height=100)
+        submit_job = st.form_submit_button("Update job listing.")
         
 
+
+
+
 ## Set resume text
-if st.session_state.resume_file:
-    st.session_state.resume_text = read_pdf(st.session_state.resume_file)
-elif st.session_state.pasted_resume:
-    st.session_state.resume_text = st.session_state.pasted_resume
-else:  
-    st.session_state.resume_text = ''    
+if submit_resume:
+    if st.session_state.resume_file is not None:
+        st.session_state.resume_text = read_pdf(st.session_state.resume_file)
+    elif st.session_state.pasted_resume is not None:
+        st.session_state.resume_text = st.session_state.pasted_resume
+    else:
+        st.error("Please upload a resume or paste it in the text area.")
+    # else:  
+        # st.session_state.resume_text = None
+
+
 
 
 ## set job listing text
+
 if st.session_state.job_listing_file:
     st.session_state.job_text = read_pdf(st.session_state.job_listing_file)
-elif st.session_state.pasted_job_listing:
+if st.session_state.pasted_job_listing:
     st.session_state.job_text = st.session_state.pasted_job_listing
-else:
-    st.session_state.job_text = ''
+# else:
+#     st.session_state.job_text = ''
 
 
 
@@ -128,7 +155,7 @@ def get_system_prompt_str():
 
 def get_llm(model_type=model_type, temperature=0.1,
             system_prompt_template_func= get_system_prompt_str,#verbose=False,
-             verbose=False, sector="data science and analytics", resume='', job=''):
+             verbose=True, sector="data science and analytics", resume='', job=''):
     """Version 2.0"""
     
     ## get prompt string

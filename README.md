@@ -3,3 +3,14 @@
 - Streamlit App: https://job-hunting-with-ai.streamlit.app/
 
 <img src="images/app-snapshot.png" style="border:solid 1px black">
+
+___
+JMI Notes re: venv
+
+```bash
+conda deactivate
+python -m venv app-env
+source app-env/bin/activate
+pip install -r requirements.txt
+```
+___

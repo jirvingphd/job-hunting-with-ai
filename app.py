@@ -32,11 +32,13 @@ def read_pdf(file):
     # pdf_file_obj.close()
     return text
 
-if ['resume_file','job_listing_file'] not in st.session_state:
+## Initialize session state
+if 'resume_file' not in st.session_state:
     
     st.session_state.resume_file = None
     st.session_state.resume_text = None
-    
+
+if 'job_listing_file' not in st.session_state:    
     st.session_state.job_listing_file = None
     st.session_state.job_text = None
 
@@ -66,7 +68,6 @@ with resume_container:
 
 ## Upload pdf or past job listing    
 with job_listing_container:
-
     st.session_state.job_listing_file = st.file_uploader("Upload the PDF job listing", type="pdf", accept_multiple_files=False)
     st.session_state.pasted_job_listing = st.text_area("Paste the job listing here", height=100)    
         

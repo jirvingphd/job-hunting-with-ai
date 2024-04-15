@@ -1,3 +1,4 @@
+import json
 import streamlit as st
 # from langchain import LangChain
 import PyPDF2
@@ -45,26 +46,45 @@ st.title('Resume and Job Listing Analyzer')
 st.sidebar.image("images/DALLE-2.png", use_column_width=True)
 st.sidebar.markdown("*This app uses OpenAI's GPT-3.5 model to analyze your resume and a job listing to provide tailored advice and recommendations.*")
 with st.container(border=True):
-    st.markdown(">- 👈 Use the sidebar (`>`) to upload your resume and the job listing as PDFs to get started.")
+    st.markdown("- 👈 First, use the sidebar (`>`) to upload your resume and the job listing as PDFs to get started.")
+    st.markdown('- 👇*Next, select a task below enter your own question.*')
 
 
 
 # st.divider()
 
-st.sidebar.header("Upload Files")
-# st.sidebar.markdown('> Upload your resume and the job listing to get started')
-st.session_state.resume_file = st.sidebar.file_uploader("Upload your PDF resume", type="pdf", accept_multiple_files=False)
-st.session_state.job_listing_file = st.sidebar.file_uploader("Upload the PDF job listing", type="pdf", accept_multiple_files=False)
+st.sidebar.markdown('> Upload your resume and the job listing to get started')
+# st.sidebar.header("Resume")
+resume_container   =    st.sidebar.expander("Resume", expanded=False)#st.sidebar.container(border=True)
+# st.sidebar.header("Job Listing")
+job_listing_container = st.sidebar.expander("Job Listing", expanded=False)#st.sidebar.container(border=True)
 
+## Upload pdf or paste resume
+with resume_container:
+    st.session_state.resume_file = st.file_uploader("Upload your PDF resume", type="pdf", accept_multiple_files=False)
+    st.session_state.pasted_resume = st.text_area("or paste your resume here:", height=100)
+
+## Upload pdf or past job listing    
+with job_listing_container:
+
+    st.session_state.job_listing_file = st.file_uploader("Upload the PDF job listing", type="pdf", accept_multiple_files=False)
+    st.session_state.pasted_job_listing = st.text_area("Paste the job listing here", height=100)    
+        
+
+## Set resume text
 if st.session_state.resume_file:
-    # st.write([i for i in dir(resume_file) if not i.startswith('_')])
     st.session_state.resume_text = read_pdf(st.session_state.resume_file)
+elif st.session_state.pasted_resume:
+    st.session_state.resume_text = st.session_state.pasted_resume
 else:  
-    st.session_state.resume_text = ''
+    st.session_state.resume_text = ''    
 
-    
+
+## set job listing text
 if st.session_state.job_listing_file:
     st.session_state.job_text = read_pdf(st.session_state.job_listing_file)
+elif st.session_state.pasted_job_listing:
+    st.session_state.job_text = st.session_state.pasted_job_listing
 else:
     st.session_state.job_text = ''
 
@@ -78,9 +98,9 @@ def get_template_string():
     You maintain a professional, friendly tone, and encouraging tone, ensuring advice is efficient, clear, and easily understandable, with the goal of enhancing user confidence and aiding their career progression.
     """
 
-st.sidebar.divider()
-st.sidebar.header("GPT Model")
-model_type = st.sidebar.radio("GPT Model", options=["gpt-3.5-turbo-0125", "gpt-3.5-turbo-instruct","gpt-4-turbo-preview"],
+# st.sidebar.divider()
+with st.sidebar.expander("GPT Model"):
+    model_type = st.radio("GPT Model", options=["gpt-3.5-turbo-0125", "gpt-3.5-turbo-instruct","gpt-4-turbo"],
                               index=0)
 
 
@@ -199,14 +219,9 @@ def print_history(llm_chain):
 #     return context
 
 
-def get_task_options(options_only=False):
-    task_prompt_dict= {
-        # "Summary of Customer Sentiment":'Provide a summary list of what 1-star reviews did not like and a summary of what did 5-star reviews liked.',
-                   'Compare Resume vs. Job':'How does my resume compare against this job listing? Provide a detailed break down list comparing my resume vs. the listing. Highlight any weaknesses.',
-                   'Craft Covert Letter':'Write a cover letter for this job. Use a non-traditional opening sentence that is very enthusiastic about the job and memorable (you can even use !). The reamining portions of the letter should be high quality and speak to my experience.',
-                   "Interview Prep":'Help me prepare for an interview. Start with a question that I should expect in the interview.',
-                   "Resume Analysis":'Analyze my resume. Start with a summary of my resume.',}
-
+def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_only=False):
+    with open(prompt_config_file, 'r') as f:
+        task_prompt_dict = json.load(f)
     if options_only:
         return list(task_prompt_dict.keys())
     else:
@@ -234,17 +249,24 @@ task_options  = get_task_options(options_only=False)
 
 with menu_container:
     ## Select summary or recommendation
-    col1,col2,col3 = st.columns([.4,.3,.3])#3)
+    # col1,col2,col3 = st.columns([.4,.3,.3])#3)
+    col1,col2 = st.columns([.6,.4])
     # show_summary = col1.button("Show Summary of Customer Sentiment")
     # show_recommendations = col1.button("Get product improvement recommendations",)
     # show_marketing_recs = col2.button("Get marketing recommendations.")
     selected_task = col1.radio("Select task:", options=task_options.keys())
     col2.markdown("> *Click below to query ChatGPT*")
     get_answer_with_context = col2.button("Get response.")
-    col3.markdown("> *Click below to reset chat history.*")
 
-    reset_button2 = col3.button("Reset Chat?", key='reset 2')
+    # reset_button2 = col3.button("Reset Chat?", key='reset 2')
 
+st.divider()
+sub_chat_menu = st.container(border=True)
+with sub_chat_menu:
+    scm_col1, scm_col2 = st.columns([.5,.5])
+    scm_col2.markdown("> *Click below to reset chat history.*")
+
+    reset_button2 = scm_col2.button("Reset Chat?", key='reset 2')
 
 reset_button1 = st.sidebar.button("Reset Chat?")
 if ('llm' not in st.session_state) or reset_button1 or reset_button2:
@@ -296,7 +318,8 @@ def download_history():
 # chat_options.markdown("**Clear conversation history.**")
 
 # reset_button  = chat_options.button("Clear",on_click=reset)
-st.download_button("Download history?", file_name="chat-history.txt", data=download_history())#data=json.dumps(st.session_state['history']))
+scm_col1.markdown("> *Click below to download chat history.*")
+scm_col1.download_button("Download history?", file_name="chat-history.txt", data=download_history())#data=json.dumps(st.session_state['history']))
 
     
 # if uploaded_file is not None:

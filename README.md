@@ -19,4 +19,7 @@ ___
 - Continue working in app-testing.ipynb to:
     - [ ] Re-send the resume and job fields for the chat template every time a message is sent. 
     -  [ ] Use an external list for memory
-- [ ]  Once workflow is figured out, update app.py
+    
+- Once workflow is figured out, update app.py:
+    - [ ] Update logic for llm and responses from notebook above.
+    - [ ] Write code for app to select the correct text using teh sidebar forms for resume and job listing.

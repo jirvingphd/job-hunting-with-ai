@@ -1,0 +1,250 @@
+## Paste resume
+JAMES M. IRVING, PH.D.
+8222 Spadderdock Way, Laurel, MD, 20724 | (518) 322-6750 | james.irving.phd@gmail.com | LINKEDIN: james-irving-phd | GITHUB: https://github.com/jirvingphd
+SUMMARY
+Innovative and enterprising data scientist. Experienced in applying advanced data science techniques to real-world problems, including statistical modeling, machine learning, and data visualization. Skilled at extracting valuable insights from complex datasets and supporting data-driven decision-making. Adept Python programmer with the demonstrated ability to rapidly master and apply new technologies. A highly analytical professional committed to continuous learning and leveraging the value of data to innovate and transform. Former neuroscience researcher with a solid foundation in science, experimental design, and cognitive neuroscience.
+     • Data Analysis
+• Statistical Modeling
+• Machine Learning
+• Data Visualization
+• Experimental Design
+• Quantitative Research Methods
+COMPETENCIES
+• Time Series Analysis
+• Signal Processing
+• Cognitive Neuroscience • Behavioral Analysis
+• Database Management • Pattern Recognition
+EXPERIENCE
+• Python Programming
+• Deep Learning
+• Natural Language Processing
+• AI/LLM Implementation
+• Adaptive Communication Style
+• Problem Solving & Critical Thinking
+ Coding Dojo | Remote
+Curriculum Writer - Data Science | Mar 2023 - Jan 2024
+• Authored and delivered three advanced data science courses covering Time Series Modeling, NLP, and Model Deployment to facilitate skill acquisition for over 100 learners.
+• Enhanced and extended the curriculum of a 16-week boot camp to a 24-week program, resulting in a 50% increase in instructional depth and engagement.
+• Developed and implemented Monday.com boards, including public forms and executive-facing Gantt charts, to automate internal workflows and streamline curriculum management, resolving over 100 issues.
+• Integrated APIs, Web scraping, and Computer Vision (CNNs) into course content, fostering practical skill development and aligning with industry demands in data science and machine learning.
+Data Science Instructor | November 2021 - March 2023
+• Achieved outstanding Net Promoter Scores (NPS) exceeding 90% through the delivery of engaging live lectures, demonstrating
+effective communication and pedagogical skills.
+• Implemented automated tools for administrative tasks, reducing student onboarding time from 5 hours to a mere 2 minutes,
+optimizing operational efficiency.
+• Authored and delivered a highly acclaimed 4-week course with a perfect NPS rating, showcasing expertise in curriculum
+development and instructional delivery.
+• Designed and presented over 16 interactive live lectures and code-along projects, significantly enhancing student participation and
+fostering a dynamic learning environment.
+Flatiron School | Remote
+Data Science Instructor | Oct 2019 - Oct 2021
+• Mentored and supervised 60+ students to successfully transition into data science, achieving a high post-program employment rate.
+• Led and conducted 90-minute study groups weekly, accumulating over 270 hours of recorded lessons, enhancing student
+comprehension and engagement.
+• Spearheaded the development and implementation of the "Flex" boot camp program, refining instructional design and delivery
+methods to meet diverse learning needs.
+• Established three student-progress-tracking Looker dashboards, providing real-time insights into student performance and
+facilitating timely intervention strategies.
+
+• Implemented data-driven approaches to enhance program efficacy, resulting in improved student outcomes and program satisfaction.
+University of Maryland, School of Medicine | Baltimore, MD
+Laboratory Manager | Jul 2017 - Aug 2018
+• Ensured full compliance with regulatory standards as the lab's public representative, achieving a flawless record with all 4
+inspections passing without demerits.
+• Negotiated and finalized a technical hardware contract worth approximately $100,000 with vendors, optimizing procurement
+processes and ensuring cost-effectiveness.
+• Managed and administered over 20 TBs of both cloud and local data storage systems, ensuring data accessibility, security, and
+efficient retrieval.
+• Successfully overhauled mouse colony management procedures, resulting in a remarkable 60% reduction in housing costs, from
+approximately $3.8k/month to $1.5k/month, through strategic resource allocation and process optimization. Postdoctoral Research Fellow | June 2015 - July 2017
+• Spearheaded neuroscience research endeavors, employing cutting-edge techniques such as in vivo optogenetics and electrophysiology recordings, resulting in groundbreaking insights into neural functioning in awake and behaving mice.
+• Developed approximately 30 custom analysis scripts in languages including Matlab, NexScript, MedPC, and Arduino, enhancing data processing capabilities and facilitating comprehensive statistical analyses of large datasets.
+• Mentored and guided a diverse team comprising 1 postdoc, 2 Ph.D. students, 3 lab techs, and 3 undergraduate volunteers, fostering an environment of collaborative learning and achieving research excellence.
+• Demonstrated self-directed learning by mastering Matlab programming and independently creating custom-designed analysis programs for large datasets in multiple programming languages, streamlining data interpretation processes and enhancing research efficiency.
+DATA SCIENCE PROJECTS
+NLP Analysis of Amazon Reviews + AI Recommendations - GitHub Link
+Natural Language Processing Analysis, Modeling, and Deployment with Actionable Insights
+• Designed and deployed a user-centric Streamlit dashboard, integrating live sentiment predictions and interactive analysis of trends to guide strategic decision-making.
+• Conducted sentiment analysis on over 5 million Amazon Grocery & Gourmet Food reviews, utilizing NLP and machine learning techniques (Logistic Regression, Tf-idf vectorization) to identify key factors affecting customer satisfaction and achieve 95% accuracy in sentiment classification.
+• Employed Hugging Face transformers and Lang Chain/ChatGPT within the dashboard with a vectorized database used for summarization and insights, translating vast consumer feedback into actionable product enhancement strategies.
+How to Make a Successful Movie – GitHub Link
+Constructing and analyzing an extensive movie database with machine-learning-based insights + Tableau Dashboard
+• Engineered a comprehensive MySQL database integrating IMDB and data from TMDB API for data-driven insights.
+• Designed an interactive Tableau dashboard to communicate findings to stakeholders, enhancing decision-making processes (see
+GitHub link).
+• Applied A/B Testing to make informed recommendations on what movies are successful at the box office.
+How to Spot a Troll – GitHub Link
+Classifying Russian Troll Tweets vs Authentic Tweets
+• Conducted EDA on 3M tweets, identifying patterns indicative of non-authentic activity by Russian Troll Farms. • Produced alternative final models - one optimized for speed, one for accuracy.
+Recidivism Risk Assessment – GitHub Link
+Classifying which released prisoners in Iowa will return to a life of crime using Next-Gen Gradient Boosted Trees
+• Built a classification model to predict recidivism risk among released prisoners with over 70% accuracy (via scikit-learn and Catboost).
+• Researched Iowa's state sentencing guidelines and sentencing enhancements to engineer new numerical features to capture the severity of the crimes committed and the duration of sentences.
+     
+Data Science (Full-Time) February 2019 - August 2019 Flatiron School
+Doctor of Philosophy August 2009 - May 2015 Neuroscience
+University of Maryland, Baltimore, MD
+Bachelor & Master of Science August 2004 - December 2008 Neuroscience
+Tulane University, New Orleans, LA
+EDUCATION
+  Programming:
+• Python & Object-Oriented Programming • SQL (MySQL, SQLAlchemy)
+• MATLAB
+• PyPi Package Publishing
+• HTML / CSS
+• NexScript programming • MedState Notation
+• Git/GitHub
+Data Analysis
+• Extract, Transform, Load (ETL) (numpy, pandas),
+• AB Testing (scipy, statsmodels, GraphPad Prism,
+SPSS)
+• Machine Learning (scikit-learn, Keras, Catboost,
+XGBoost),
+• Database Administration
+PROFESSIONAL SKILLS
+Software:
+• Adobe Illustrator
+• Adobe Photoshop
+• GraphPad Prism
+• Microsoft Office (Word, Excel, PowerPoint)
+• NeuroExplorer
+• Plexon OfflineSorter
+• VS Code
+• Jupyter Notebook/Lab Visualization/Dashboarding
+• Plotly / Dash
+• Tableau
+• Streamlit Deployment
+• Seaborn / Matplotlib
+• Looker
+Natural Language Processing:
+• nltk
+• spaCy
+• Tensorflow
+• Hugging Face transformers • LangChain
+
+
+
+########################### Paste Job 
+
+Data Engineer
+The Brite Group
+3.0out of 5
+1100 Herndon Parkway, Herndon, VA 20170
+Hybrid work
+Full-time
+&nbsp;
+Profile insights
+Here’s how the job qualifications align with your profile.
+Skills
+
+Power BI
+
+Hadoop
+
+Azure Data Lake
++ show more
+
+Do you have experience in Power BI?
+Education
+
+Master's degree
+
+Bachelor's degree
+&nbsp;
+Job details
+Here’s how the job details align with your profile.
+Job type
+
+Full-time
+Shift and schedule
+
+Monday to Friday
+Work setting
+
+Hybrid work
+&nbsp;
+Location
+1100 Herndon Parkway, Herndon, VA 20170
+&nbsp;
+Benefits
+Pulled from the full job description
+401(k)
+Dental insurance
+Health insurance
+Life insurance
+Paid time off
+Retirement plan
+Tuition reimbursement
+&nbsp;
+Full job description
+We are seeking a US Citizen to support our Federal customer, who is highly skilled and experienced Software Engineer with a good understanding of data driven and cloud development tasks to join our dynamic team. The ideal candidate should have a strong background in Software development, data engineering, ML, related field with a good, applied knowledge of data science tools and techniques. The candidates need to be proficient in using Python, ETL tools, Data modeling, container technologies, developing APIs, webservices, Databricks, AWS services, Azure Data Factory, Scala, Linux, Hadoop File System (HDFS), PyCharm, YARN, Spark, PySpark and Tableau. The candidate needs to have skills and technical knowledge with regards to application development using databases such as Oracle, Postgresql, MySql and Redshift. The candidate will be responsible for developing and implementing data-driven solutions, contributing to the design and architecture of data pipelines, and leveraging cutting-edge technologies to extract valuable insights from large datasets.
+
+Key Responsibilities:
+
+Design, develop, and deploy end-to-end data solutions using Python, R, SQL across various environments.
+Working with complex queries to extract and integrate datasets and storing within S3 on the AWS environment.
+Development Dashboards using data visualization tools like Tableau, Power BI etc.
+Collaborate with cross-functional teams to understand business requirements and translate them into technical specifications.
+Implement and optimize data processing algorithms and machine learning models.
+Extract, clean, and transform data from various sources to ensure its accuracy and reliability.
+Work with large-scale distributed systems, including Hadoop and Spark, to process and analyze big data.
+Utilize Tableau for data visualization and reporting purposes.
+Troubleshoot and optimize data processing workflows for performance and scalability
+Developing solutions using programing languages such as Java, Python, R.
+Developing webservices, API’s.
+Database management and working within Postgresql, Redshift etc.
+Develop scripts to move the data from Unix/Linux file system to Hadoop Distributed File System (HDFS).
+Provide modifications, updates, and corrections to the computational application software using SAS, SAS Viya, R, Sparkly R, PySpark and Python.
+Developing applications using databases such as Oracle, Postgresql, MySql and Redshift.
+Participate as subject matter experts in project-related meetings and walkthroughs, such as those needed for project planning, requirements, design, test, and interface requirements.
+Constructing and performing complex database search queries.
+Familiarity with computer science concepts, data architecture, and statistics.
+Ability to communicate technical findings to non-technical audiences.
+Port computational application software developed in SAS, Python, and R to multiprocessing environments using Apache Spark, MapReduce, and/or Sparkly R.
+Qualifications:
+
+Minimum 5 years of experience in software engineering and data science roles. Proficient in Python, R, web services and using AWS cloud offerings. Strong background in designing and implementing data pipelines.Experience with machine learning algorithms and model deployment.Knowledge of distributed computing and big data technologies.Excellent problem-solving and analytical skills.Effective communication and collaboration skills.
+
+REQUIRES US Citizenship
+· 4+ years Expertise in Linux system level programming
+· 4+ years Expertise in container technology especially Kubernetes and Docker
+· Knowledge and experience with the Kubernetes API.
+· Knowledge in the deployment of IaaS solutions on the AWS
+· 4+ years’ experience with Python and Shell Scripts
+· C++ a plus
+· 4+ years of experience developing applications using programing languages such as Java, Python, R.
+· 4+ years of experience in developing web services, API’s..
+· 4+ years of experience installing databases like Postgresql, Redshift.
+Preferred Qualifications: Bachelor's or master’s degree in computer science, Data Science, or a related field.
+
+Job Type: Full-time
+
+Benefits:
+
+401(k)
+Dental insurance
+Health insurance
+Life insurance
+Paid time off
+Retirement plan
+Tuition reimbursement
+Vision insurance
+Compensation package:
+
+Bonus opportunities
+Performance bonus
+Yearly pay
+Experience level:
+
+5 years
+Schedule:
+
+Monday to Friday
+Ability to Relocate:
+
+Herndon, VA 20170: Relocate before starting work (Required)
+Work Location: Hybrid remote in Herndon, VA 20170
+
+&nbsp;
+If you require alternative methods of application or screening, you must approach the employer directly to request this as Indeed is not responsible for the employer's application process.
+&nbsp;

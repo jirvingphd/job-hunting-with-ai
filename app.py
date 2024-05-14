@@ -76,11 +76,14 @@ with st.sidebar.container(border=True):
 if 'OPENAI_API_KEY' not in st.session_state:
     st.session_state['OPENAI_API_KEY'] = ""
 
-if pwd == 'formerninja':
+
+if pwd == st.secrets['admin_password']:
     try:
-        st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
-    except:
         st.session_statel.OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
+    except:
+        st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
+    
+        
 # else:
 #         st.session_state['OPENAI_API_KEY'] = ""#os.getenv("OPENAI_API_KEY")
 
@@ -90,17 +93,20 @@ with st.container(border=True):
 
 
 # st.divider()
-
-docs_container = st.expander("### Upload Documents", expanded=True)#border=True)
+st.markdown("### Upload Documents")
+docs_container = st.expander("Upload Resume and Job Listing", expanded=False)#border=True)
 with docs_container:
     # st.markdown('#### Upload Documents')# resume and the job listing to get started')
     # st.sidebar.header("Resume")
+    st.markdown(">*Make sure to press the Update Job Listing or Update Resume buttons below after uploading or pasting the text.*")
+
     c1, c2 = st.columns([.5,.5])
+    c1.markdown("#### Resume")
     resume_container   =    c1.container(border=True)#st.sidebar.container(border=True)
-    resume_container.markdown("#### Resume")
+    
+    c2.markdown("#### Job Listing")
     # st.sidebar.header("Job Listing")
     job_listing_container = c2.container(border=True)#st.sidebar.container(border=True)
-    job_listing_container.markdown("#### Job Listing")
 # st.sidebar.divider()
 
 # st.divider()
@@ -288,9 +294,12 @@ def print_history(llm_chain):
 
 
 
-def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_only=False):
+def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_only=False, remove_dep=True):
     with open(prompt_config_file, 'r') as f:
         task_prompt_dict = json.load(f)
+        
+    if remove_dep:
+        task_prompt_dict = {k:v for k,v in task_prompt_dict.items() if  "DEP" not in k}
     if options_only:
         return list(task_prompt_dict.keys())
     else:
@@ -304,7 +313,7 @@ menu_container = st.container(border=True)
 
 chat_container = st.container()
 # chat_container.header("Q&A")
-output_container = chat_container.container(border=True, height=400)
+output_container = chat_container.container(border=True, height=300)
 user_text = chat_container.chat_input(placeholder="Enter your question here.")
 
 ai_avatar  = "🤖"
@@ -318,6 +327,8 @@ task_options  = get_task_options(options_only=False)
 
 
 with menu_container:
+    st.markdown("> *Select a task and click `Get Response`, or enter your own question below the chat window to get started.*")
+
     ## Select summary or recommendation
     # col1,col2,col3 = st.columns([.4,.3,.3])#3)
     col1,col2 = st.columns([.6,.4])
@@ -330,7 +341,8 @@ with menu_container:
 
     # reset_button2 = col3.button("Reset Chat?", key='reset 2')
 
-st.divider()
+# st.divider()
+st.markdown("### Chat History")
 sub_chat_menu = st.container(border=True)
 with sub_chat_menu:
     scm_col1, scm_col2 = st.columns([.5,.5])

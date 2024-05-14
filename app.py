@@ -108,7 +108,7 @@ with st.expander("Instructions", expanded=True):
 
 
 # st.divider()
-st.markdown("### Upload Documents")
+# st.markdown("### Upload Documents")
 # st.markdown(">*Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.*")
 
 docs_container = st.expander("📄Upload Resume and Job Listing", expanded=False)#border=True)

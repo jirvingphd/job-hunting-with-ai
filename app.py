@@ -62,7 +62,7 @@ st.sidebar.image("images/DALLE-2.png", use_column_width=True)
 st.sidebar.markdown("*This app uses ChatGPT to analyze your resume and a job listing to provide tailored advice and recommendations.*")
 ### HERE
 with st.sidebar.container(border=True):
-    st.subheader("OpenAI API Key")
+    st.subheader("🔑OpenAI API Key")
     st.write('> *Enter your OpenAI API key below. You can sign up for one [here](https://platform.openai.com/api-keys).*')
     st.session_state['OPENAI_API_KEY']  = st.text_input("OpenAI API Key", type="password", value=st.session_state.OPENAI_API_KEY)
     # with st.sidebar.expander("GPT Model"):
@@ -99,7 +99,6 @@ docs_container = st.expander("📄Upload Resume and Job Listing", expanded=False
 with docs_container:
     # st.markdown('#### Upload Documents')# resume and the job listing to get started')
     # st.sidebar.header("Resume")
-    st.markdown(">*Make sure to press the Update Job Listing or Update Resume buttons below after uploading or pasting the text.*")
 
     c1, c2 = st.columns([.5,.5])
     c1.markdown("#### Resume")
@@ -138,6 +137,7 @@ with job_listing_container:
         submit_job = st.form_submit_button("Update job listing.")
         
 
+st.markdown(">*Make sure to press the Update Job Listing or Update Resume buttons below after uploading or pasting the text.*")
 
 
 

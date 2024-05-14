@@ -93,9 +93,9 @@ md_instructions = """
 
 ## Instructions
 - 👈 **First, open sidebar (`>`) to add your 🔑 OpenAI API Key** and select which ChatGPT model (Default is gpt-4o).
-- 👇**Next, 📄Upload Resume and Job Listing below.**
-    - ***Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.***
-- 🤖Finally, select a pre-defined task or ask ChatGPT your own questions.
+- 👇**Next, open the menu below to 📄Upload Resume and Job Listing**
+    - Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.
+- 🤖**Finally, select a pre-defined task or ask ChatGPT your own questions.**
 
 
 - (Optional) 📥*Download the chat history at the end of the session.*

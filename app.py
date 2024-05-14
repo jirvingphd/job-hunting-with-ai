@@ -91,8 +91,8 @@ if pwd == st.secrets['admin_password']:
 #         st.session_state['OPENAI_API_KEY'] = ""#os.getenv("OPENAI_API_KEY")
 
 with st.container(border=True):
-    st.markdown("- 👈 First, use the sidebar (`>`) to upload your OPENAI Api Key.")
-    st.markdown('- 👇*Next, upload or paste your  resume and job listing documents.*')
+    st.markdown("- 👈 First, use the sidebar (`>`) to add your 🔑OpenAI API Key.")
+    st.markdown('- 👇*Next, 📄Upload Resume and Job Listing below.')
 
 
 # st.divider()

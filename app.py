@@ -74,7 +74,7 @@ with st.sidebar.container(border=True):
                                 index=0)
     
     with st.expander("Admin Options", expanded=False):
-        pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password')
+        pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password', value="")
         st.write('For admin password, reset chat after entering the password.')
 
 

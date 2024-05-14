@@ -74,7 +74,10 @@ with st.sidebar.container(border=True):
 if 'OPENAI_API_KEY' not in st.session_state:
 
     if pwd == 'formerninja':
-        st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
+        try:
+            st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
+        except:
+            st.session_state.OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
     else:
         st.session_state.OPENAI_API_KEY = ""#os.getenv("OPENAI_API_KEY")
 

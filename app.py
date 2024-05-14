@@ -54,6 +54,8 @@ if 'job_text' not in st.session_state:
 if 'OPENAI_API_KEY' not in st.session_state:
     st.session_state.OPENAI_API_KEY = ""
 
+# if 'llm' not in st.session_state:
+#     st.session_state.llm = None
 
 st.title('Resume and Job Listing Analyzer')
 
@@ -78,13 +80,9 @@ with st.sidebar.container(border=True):
         st.write('For admin password, reset chat after entering the password.')
 
 
-
-
-
-
 if pwd == st.secrets['admin_password']:
     # try:
-    st.session_state.OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
+    st.session_state.OPENAI_API_KEY = st.secrets['MY_OPENAI_API_KEY']
     # except:
     #     st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
     
@@ -234,9 +232,10 @@ def get_llm_no_memory(model_type="gpt-3.5-turbo-0125", temperature=0.1, #
     ])
     final_prompt_template = final_prompt_template.partial(sector=sector)#, resume=resume, job=job)
     
-    if st.session_state.OPENAI_API_KEY == "":
-        st.error("Please enter your OpenAI API Key in the sidebar.")
-        return None
+    # if st.session_state.OPENAI_API_KEY == "":
+    #     st.error("Please enter your OpenAI API Key in the sidebar.")
+    #     # return None
+        
     llm = ChatOpenAI(temperature=temperature, model=model_type, api_key=st.session_state.OPENAI_API_KEY)
     
     
@@ -261,7 +260,13 @@ def fake_streaming(response):
         
             
 
+
+## TO DO: Re-create the llm for each response
 def get_response(llm_no_mem, input, resume='', job='', history=[]):
+    
+    if llm_no_mem is None:
+        llm_no_mem = get_llm_no_memory(model_type=model_type,)
+    
     output = llm_no_mem.invoke({'input':input,
                    'resume':resume,
                    'job':job,
@@ -370,7 +375,10 @@ if ('llm' not in st.session_state) or reset_button1 or reset_button2:
     st.session_state['history'] = []
     # get_job_text()
     # get_resume_text()
-    st.session_state['llm'] = get_llm_no_memory(model_type=model_type,)#reset_agent(retriever=retriever)#st.session_state['retriever'] )
+    if st.session_state.OPENAI_API_KEY == "":
+        st.error("Please enter your OpenAI API Key in the sidebar.")
+    else:
+        st.session_state['llm'] = get_llm_no_memory(model_type=model_type,)#reset_agent(retriever=retriever)#st.session_state['retriever'] )
 
 
 # with chat_container:
@@ -384,7 +392,8 @@ with output_container:
     if user_text is not None:
         st.chat_message("user", avatar=user_avatar).write(user_text)
 
-        response, history = get_response(st.session_state['llm'], input=user_text,
+        response, history = get_response(None,#st.session_state['llm'],
+                                         input=user_text,
                                          resume=st.session_state.resume_text,
                                          job = st.session_state.job_text,
                                          history=st.session_state['history'])

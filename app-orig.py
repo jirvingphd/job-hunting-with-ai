@@ -110,8 +110,6 @@ if submit_resume:
         # st.session_state.resume_text = None
 
 
-
-
 ## set job listing text
 if submit_job:
     if st.session_state.job_listing_file:

@@ -70,6 +70,7 @@ with st.sidebar.container(border=True):
     model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125", "gpt-3.5-turbo-instruct",],
                                 index=0)
     pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password')
+    st.write('For admin password, reset chat after entering the password.')
 
 
 
@@ -94,7 +95,7 @@ with st.container(border=True):
 
 # st.divider()
 st.markdown("### Upload Documents")
-docs_container = st.expander("Upload Resume and Job Listing", expanded=False)#border=True)
+docs_container = st.expander("📄Upload Resume and Job Listing", expanded=False)#border=True)
 with docs_container:
     # st.markdown('#### Upload Documents')# resume and the job listing to get started')
     # st.sidebar.header("Resume")

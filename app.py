@@ -58,7 +58,20 @@ st.title('Resume and Job Listing Analyzer')
 
 # c1, c2 = st.columns([.3,.6])
 st.sidebar.image("images/DALLE-2.png", use_column_width=True)
-st.sidebar.markdown("*This app uses OpenAI's GPT-3.5 model to analyze your resume and a job listing to provide tailored advice and recommendations.*")
+st.sidebar.markdown("*This app uses ChatGPT to analyze your resume and a job listing to provide tailored advice and recommendations.*")
+### HERE
+with st.sidebar.container(border=True):
+    st.subheader("OpenAI API Key")
+    st.write('> *Enter your OpenAI API key below. You can sign up for one [here](https://platform.openai.com/api-keys).*')
+    st.session_state['OPENAI_API_KEY']  = st.text_input("OpenAI API Key", type="password", value=st.session_state.OPENAI_API_KEY)
+    # with st.sidebar.expander("GPT Model"):
+    # st.write('>*Select a GPT model to use for the analysis.*')
+    model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125", "gpt-3.5-turbo-instruct",],
+                                index=0)
+
+
+
+
 with st.container(border=True):
     st.markdown("- 👈 First, use the sidebar (`>`) to upload your resume and the job listing as PDFs to get started.")
     st.markdown('- 👇*Next, select a task below enter your own question.*')
@@ -69,10 +82,14 @@ with st.container(border=True):
 
 st.sidebar.markdown('> Upload your resume and the job listing to get started')
 # st.sidebar.header("Resume")
+
+
 resume_container   =    st.sidebar.expander("Resume", expanded=False)#st.sidebar.container(border=True)
 # st.sidebar.header("Job Listing")
 job_listing_container = st.sidebar.expander("Job Listing", expanded=False)#st.sidebar.container(border=True)
 st.sidebar.divider()
+
+
 ## Upload pdf or paste resume
 with resume_container:
     resume_form =st.form(key='resume_form')
@@ -155,13 +172,6 @@ def get_template_string():
     You maintain a professional, friendly tone, and encouraging tone, ensuring advice is efficient, clear, and easily understandable, with the goal of enhancing user confidence and aiding their career progression.
     """
 
-# st.sidebar.divider()
-st.sidebar.write('> *Enter your OpenAI API key below. If you do not have one, you can sign up for one [here](https://platform.openai.com/api-keys).*')
-st.session_state['OPENAI_API_KEY']  = st.sidebar.text_input("OpenAI API Key", type="password", value=st.session_state.OPENAI_API_KEY)
-with st.sidebar.expander("GPT Model"):
-    model_type = st.radio("GPT Model", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125", "gpt-3.5-turbo-instruct",],
-                              index=0)
-
 
 def get_system_prompt_str():
     """Helper function for get_prompt_template. New v2.0"""
@@ -171,48 +181,6 @@ def get_system_prompt_str():
     " with the goal of aiding their career progression. Ask the user for their resume and job listing if not provided and they are needed to asnwer .")
     context = "\nUse the following context, if provided, to help answer the questions:\n\nHere is my resume:\n-------------\n {resume}\n\n Here is the job listing:\n-------------\n{job}\n\n "    
     return system_prompt + context
-
-# def get_prompt_template(system_prompt):
-#     # system_prompt = get_system_prompt_str()
-#     final_promp_str = system_prompt + """
-#         Current conversation:
-#         {history}
-#         Human: {input}
-#         AI:"""
-        
-#     final_prompt_template = ChatPromptTemplate.from_template(final_promp_str)
-#     return final_prompt_template
-
-
-# def get_llm(model_type=model_type, temperature=0.1,
-#             system_prompt_template_func= get_system_prompt_str,#verbose=False,
-#              verbose=True, sector="data science and analytics", resume='', job=''):
-#     """Version 2.0"""
-    
-#     ## get prompt string
-#     system_prompt = system_prompt_template_func()
-#     final_promp_str = system_prompt + """
-#         Current conversation:
-#         {history}
-#         Human: {input}
-#         AI:"""
-        
-#     final_prompt_template = ChatPromptTemplate.from_template(final_promp_str)
-#     final_prompt_template = final_prompt_template.partial(sector=sector, resume=resume, job=job)
-        
-#     llm = ChatOpenAI(temperature=temperature, model=model_type)
-    
-#     llm_chain = ConversationChain(prompt=final_prompt_template, 
-#                                   llm=llm, 
-#                                   memory=ConversationBufferWindowMemory(memory_key='history',
-#                                                                         human_prefix="Human",
-#                                                                         ai_prefix="AI",
-#                                                                         k=3),
-#                                   verbose=verbose, 
-#                                 #   input_key="input",
-#                                   output_key="response")#,#callbacks=callbacks)
-    
-#     return llm_chain
 
 
 def get_llm_no_memory(model_type="gpt-3.5-turbo-0125", temperature=0.1, #
@@ -249,17 +217,6 @@ def get_llm_no_memory(model_type="gpt-3.5-turbo-0125", temperature=0.1, #
     return llm_chain
             
             
-# def reset_agent(#fpath_db = FPATHS['data']['app']['vector-db_dir'],
-#                 # retriever=retriever, #st.session_state['retriever'] , 
-#                 starter_message = "Hello, there! Enter your question here and I will check the full reviews database to provide you the best answer.",
-#                get_agent_kws={}):
-#     # fpath_db
-#     agent_exec = get_llm( **get_agent_kws)
-#     agent_exec.memory.chat_memory.add_ai_message(starter_message)
-#     with chat_container:
-#         st.chat_message("assistant", avatar=ai_avatar).write_stream(fake_streaming(starter_message))
-#         # print_history(agent_exec)
-#     return agent_exec
     
 
 def fake_streaming(response):
@@ -314,25 +271,6 @@ def print_history(llm_chain):
             st.chat_message("user", avatar=user_avatar).write(msg.content)
         print()
 
-
-
-
-# def get_context_strings(context_resume=None, context_job=None,):
-#     if context_resume is None:
-#         context_resume = st.session_state.resume_text
-    
-#     if context_job is None:
-#         context_job = st.session_state.job_text
-#     # task_prompt_dict = get_task_options(options_only=False)
-#     # system_prompt = task_prompt_dict[selected_task]
-    
-#     # template_assistant = "You are a helpful assistant data scientist who uses NLP analysis of customer reviews to inform business-decision-making:"
-#     # product_template = f" Assume all user questions are asking about the content in the user reviews. Note the product metadata is:\n```{product_string}```\n\n"
-#     # template_starter = get_template_string()
-#     context = f"\nHere is my resume: \n\n-------------\n {context_resume}.\n\n Here is the job listing:\n\n-------------\n{context_job}.\n\n"
-#     # context += f"Use the {context_type} first before using the retrieved documents."
-#     # template_assistant=template_starter+ context
-#     return context
 
 
 def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_only=False):
@@ -414,21 +352,6 @@ with output_container:
         st.chat_message('assistant', avatar=ai_avatar).write(fake_streaming(response))#response['response']))
 
 
-    # if get_answer_with_context:
-    #     user_text = task_options[selected_task]
-    #     raise Exception("CONTINUE HERE")
-    #     prompt_text =  task_options[selected_task]
-    #     st.chat_message("user", avatar=user_avatar).write(prompt_text)
-    #     response = st.session_state['llm'].invoke({'input':prompt_text})
-
-        
-    #     # print_history(st.session_state['agent-summarize'])
-
-    #     # response = st.session_state['agent'].invoke({"input":prompt_text})
-    #     st.chat_message('assistant', avatar=ai_avatar).write(fake_streaming(response['response']))
-
-
-        # print_history(st.session_state['llm'])
     
 def download_history():
         
@@ -451,17 +374,3 @@ def download_history():
 # reset_button  = chat_options.button("Clear",on_click=reset)
 scm_col1.markdown("> *Click below to download chat history.*")
 scm_col1.download_button("Download history?", file_name="chat-history.txt", data=download_history())#data=json.dumps(st.session_state['history']))
-
-    
-# if uploaded_file is not None:
-#      # To read file as bytes:
-#      bytes_data = uploaded_file.getvalue()
-#      st.write(bytes_data)
-     
-#      # To convert to a string based IO:
-#     #  stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-#     #  st.write(stringio
-              
-#      # To read file as string:
-#      string_data = stringio.read()
-#      st.write(string_data)

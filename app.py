@@ -90,8 +90,6 @@ if pwd == st.secrets['admin_password']:
 # else:
 #         st.session_state['OPENAI_API_KEY'] = ""#os.getenv("OPENAI_API_KEY")
 md_instructions = """
-
-## Instructions
 - 👈 **First, open sidebar (`>`) to add your 🔑 OpenAI API Key** and select which ChatGPT model (Default is gpt-4o).
 - 👇**Next, open the menu below to 📄Upload Resume and Job Listing**
     - Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.
@@ -100,7 +98,7 @@ md_instructions = """
 
 - (Optional) 📥*Download the chat history at the end of the session.*
 """
-with st.container(border=True):
+with st.expander("Instructions", expanded=True):
     st.markdown(md_instructions)
     # st.markdown("- 👈 First, use the sidebar (`>`) to add your 🔑OpenAI API Key and select which ChatGPT model.")
     # st.markdown('- 👇*Next, 📄Upload Resume and Job Listing below.')

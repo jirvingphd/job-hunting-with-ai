@@ -95,6 +95,8 @@ with st.container(border=True):
 
 # st.divider()
 st.markdown("### Upload Documents")
+st.markdown(">*Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.*")
+
 docs_container = st.expander("📄Upload Resume and Job Listing", expanded=False)#border=True)
 with docs_container:
     # st.markdown('#### Upload Documents')# resume and the job listing to get started')
@@ -137,7 +139,6 @@ with job_listing_container:
         submit_job = st.form_submit_button("Update Job Listing.")
         
 
-st.markdown(">*Make sure to press the  `Update Resume` or `Update Job Listing` buttons above after uploading or pasting the text.*")
 
 
 

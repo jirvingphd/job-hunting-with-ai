@@ -73,26 +73,29 @@ with st.sidebar.container(border=True):
 
 
 with st.container(border=True):
-    st.markdown("- 👈 First, use the sidebar (`>`) to upload your resume and the job listing as PDFs to get started.")
-    st.markdown('- 👇*Next, select a task below enter your own question.*')
-
+    st.markdown("- 👈 First, use the sidebar (`>`) to upload your OPENAI Api Key.")
+    st.markdown('- 👇*Next, upload or paste your  resume and job listing documents.*')
 
 
 # st.divider()
 
-st.sidebar.markdown('> Upload your resume and the job listing to get started')
-# st.sidebar.header("Resume")
+docs_container = st.expander("### Upload Documents", expanded=True)#border=True)
+with docs_container:
+    # st.markdown('#### Upload Documents')# resume and the job listing to get started')
+    # st.sidebar.header("Resume")
+    c1, c2 = st.columns([.5,.5])
+    resume_container   =    c1.container(border=True)#st.sidebar.container(border=True)
+    resume_container.markdown("Resume")
+    # st.sidebar.header("Job Listing")
+    job_listing_container = c2.container(border=True)#st.sidebar.container(border=True)
+    job_listing_container.markdown("Job Listing")
+# st.sidebar.divider()
 
-
-resume_container   =    st.sidebar.expander("Resume", expanded=False)#st.sidebar.container(border=True)
-# st.sidebar.header("Job Listing")
-job_listing_container = st.sidebar.expander("Job Listing", expanded=False)#st.sidebar.container(border=True)
-st.sidebar.divider()
-
+# st.divider()
 
 ## Upload pdf or paste resume
 with resume_container:
-    resume_form =st.form(key='resume_form')
+    resume_form =st.form(key='resume_form', border=False)
     
     with resume_form:
         st.session_state.resume_file = st.file_uploader("Upload your PDF resume", type="pdf", accept_multiple_files=False)
@@ -106,7 +109,7 @@ with resume_container:
 
 ## Upload pdf or past job listing    
 with job_listing_container:
-    job_form =st.form(key='job_form')
+    job_form =st.form(key='job_form', border=False)
 
     with job_form:
         
@@ -281,7 +284,8 @@ def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_o
     else:
         return task_prompt_dict
 
-
+# st.divider()
+st.header("Ask ChatGPT")
 # st.header("AI Recommendations")
 # summary_container = st.container()
 menu_container = st.container(border=True)

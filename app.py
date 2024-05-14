@@ -78,9 +78,9 @@ if 'OPENAI_API_KEY' not in st.session_state:
 
 if pwd == 'formerninja':
     try:
-        st.session_state['OPENAI_API_KEY'] = os.getenv ('OPENAI_API_KEY')
+        st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
     except:
-        st.session_state['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+        st.session_statel.OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
 # else:
 #         st.session_state['OPENAI_API_KEY'] = ""#os.getenv("OPENAI_API_KEY")
 

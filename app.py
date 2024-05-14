@@ -89,11 +89,19 @@ if pwd == st.secrets['admin_password']:
         
 # else:
 #         st.session_state['OPENAI_API_KEY'] = ""#os.getenv("OPENAI_API_KEY")
+md_instructions = """
 
+## Instructions
+- 👈 First, use the sidebar (`>`) to add your 🔑OpenAI API Key and select which ChatGPT model.
+- 👇*Next, 📄Upload Resume and Job Listing below.
+    - ***Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.***
+- 🤖Finally, ask ChatGPT for advice and recommendations.
+- 📥*Download the chat history at the end of the session.*
+"""
 with st.container(border=True):
     st.markdown("- 👈 First, use the sidebar (`>`) to add your 🔑OpenAI API Key and select which ChatGPT model.")
     st.markdown('- 👇*Next, 📄Upload Resume and Job Listing below.')
-    st.markdown(">*Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.*")
+    st.markdown("    - *Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.*")
 
     st.markdown("- 🤖Finally, ask ChatGPT for advice and recommendations.")
 
@@ -415,4 +423,4 @@ def download_history(include_docs=True):
 
 # reset_button  = chat_options.button("Clear",on_click=reset)
 scm_col1.markdown("> *Click below to download chat history.*")
-scm_col1.download_button("Download history?", file_name="chat-history.txt", data=download_history())#data=json.dumps(st.session_state['history']))
+scm_col1.download_button("📥Download history?", file_name="chat-history.txt", data=download_history())#data=json.dumps(st.session_state['history']))

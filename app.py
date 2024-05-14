@@ -85,10 +85,10 @@ with docs_container:
     # st.sidebar.header("Resume")
     c1, c2 = st.columns([.5,.5])
     resume_container   =    c1.container(border=True)#st.sidebar.container(border=True)
-    resume_container.markdown("Resume")
+    resume_container.markdown("#### Resume")
     # st.sidebar.header("Job Listing")
     job_listing_container = c2.container(border=True)#st.sidebar.container(border=True)
-    job_listing_container.markdown("Job Listing")
+    job_listing_container.markdown("#### Job Listing")
 # st.sidebar.divider()
 
 # st.divider()

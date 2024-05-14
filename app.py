@@ -60,9 +60,9 @@ st.title('Resume and Job Listing Analyzer')
 # c1, c2 = st.columns([.3,.6])
 st.sidebar.image("images/DALLE-2.png", use_column_width=True)
 st.sidebar.markdown("*This app uses ChatGPT to analyze your resume and a job listing to provide tailored advice and recommendations.*")
-### HERE
-if 'OPENAI_API_KEY' not in st.session_state:
-    st.session_state['OPENAI_API_KEY'] = ""
+# ### HERE
+# if 'OPENAI_API_KEY' not in st.session_state:
+#     st.session_state['OPENAI_API_KEY'] = ""
     
 with st.sidebar.container(border=True):
     st.subheader("🔑OpenAI API Key")
@@ -84,7 +84,7 @@ with st.sidebar.container(border=True):
 
 if pwd == st.secrets['admin_password']:
     # try:
-    st.session_statel.OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
+    st.session_state.OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
     # except:
     #     st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
     
@@ -102,16 +102,8 @@ md_instructions = """
 """
 with st.expander("Instructions", expanded=True):
     st.markdown(md_instructions)
-    # st.markdown("- 👈 First, use the sidebar (`>`) to add your 🔑OpenAI API Key and select which ChatGPT model.")
-    # st.markdown('- 👇*Next, 📄Upload Resume and Job Listing below.')
-    # st.markdown("    - *Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.*")
-
-    # st.markdown("- 🤖Finally, ask ChatGPT for advice and recommendations.")
 
 
-# st.divider()
-# st.markdown("### Upload Documents")
-# st.markdown(">*Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.*")
 
 docs_container = st.expander("📄Upload Resume and Job Listing", expanded=False)#border=True)
 with docs_container:

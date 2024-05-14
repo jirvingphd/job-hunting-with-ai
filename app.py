@@ -51,8 +51,7 @@ if "history" not in st.session_state:
 if 'job_text' not in st.session_state:
     st.session_state.job_text = None
 
-if 'OPENAI_API_KEY' not in st.session_state:
-    st.session_state.OPENAI_API_KEY = ""#os.getenv("OPENAI_API_KEY")
+
 
 st.title('Resume and Job Listing Analyzer')
 
@@ -68,9 +67,16 @@ with st.sidebar.container(border=True):
     # st.write('>*Select a GPT model to use for the analysis.*')
     model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125", "gpt-3.5-turbo-instruct",],
                                 index=0)
+    pwd = st.text_input('(Admin Only) Input password to fill API key', type='password')
 
 
 
+if 'OPENAI_API_KEY' not in st.session_state:
+
+    if pwd == 'formerninja':
+        st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
+    else:
+        st.session_state.OPENAI_API_KEY = ""#os.getenv("OPENAI_API_KEY")
 
 with st.container(border=True):
     st.markdown("- 👈 First, use the sidebar (`>`) to upload your OPENAI Api Key.")

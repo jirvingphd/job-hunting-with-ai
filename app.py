@@ -369,7 +369,7 @@ with output_container:
 
 
     
-def download_history():
+def download_history(include_docs=True):
         
     avatar_dict = {'human': user_avatar,
                    'ai':ai_avatar,
@@ -382,6 +382,13 @@ def download_history():
         type_message = msg.type#type(msg) x
             # with st.chat_message(name=i["role"],avatar=avatar_dict[ i['role']]):
         md_history.append(f"{avatar_dict[type_message]}: {msg.content}")
+        
+    if include_docs:
+        md_history.append("___")
+        md_history.append("### Documents Used:")
+        md_history.append(f"- Resume:\n{st.session_state.resume_text}")
+        md_history.append(f'- Job Listing:\n{st.session_state.job_text}')
+    
     return "\n\n".join(md_history)
     # if submit_button:
     

@@ -51,6 +51,8 @@ if "history" not in st.session_state:
 if 'job_text' not in st.session_state:
     st.session_state.job_text = None
 
+if 'OPENAI_API_KEY' not in st.session_state:
+    st.session_state.OPENAI_API_KEY = ""
 
 
 st.title('Resume and Job Listing Analyzer')

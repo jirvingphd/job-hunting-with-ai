@@ -93,12 +93,14 @@ if pwd == st.secrets['admin_password']:
 with st.container(border=True):
     st.markdown("- 👈 First, use the sidebar (`>`) to add your 🔑OpenAI API Key and select which ChatGPT model.")
     st.markdown('- 👇*Next, 📄Upload Resume and Job Listing below.')
+    st.markdown(">*Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.*")
+
     st.markdown("- 🤖Finally, ask ChatGPT for advice and recommendations.")
 
 
 # st.divider()
 st.markdown("### Upload Documents")
-st.markdown(">*Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.*")
+# st.markdown(">*Make sure to press the  `Update Resume` or `Update Job Listing` buttons after uploading or pasting the text.*")
 
 docs_container = st.expander("📄Upload Resume and Job Listing", expanded=False)#border=True)
 with docs_container:

@@ -61,6 +61,9 @@ st.title('Resume and Job Listing Analyzer')
 st.sidebar.image("images/DALLE-2.png", use_column_width=True)
 st.sidebar.markdown("*This app uses ChatGPT to analyze your resume and a job listing to provide tailored advice and recommendations.*")
 ### HERE
+if 'OPENAI_API_KEY' not in st.session_state:
+    st.session_state['OPENAI_API_KEY'] = ""
+    
 with st.sidebar.container(border=True):
     st.subheader("🔑OpenAI API Key")
     st.write('> *Enter your OpenAI API key below. You can sign up for one [here](https://platform.openai.com/api-keys).*')
@@ -76,15 +79,14 @@ with st.sidebar.container(border=True):
 
 
 
-if 'OPENAI_API_KEY' not in st.session_state:
-    st.session_state['OPENAI_API_KEY'] = ""
+
 
 
 if pwd == st.secrets['admin_password']:
-    try:
-        st.session_statel.OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
-    except:
-        st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
+    # try:
+    st.session_statel.OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
+    # except:
+    #     st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
     
         
 # else:

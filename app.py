@@ -120,7 +120,7 @@ with resume_container:
     
         # Pasted Version
         st.session_state.pasted_resume = st.text_area("or paste your resume here:")
-        submit_resume = st.form_submit_button("Update resume.")
+        submit_resume = st.form_submit_button("Update Resume")
     # st.session_state.pasted_resume = st.text_area("or paste your resume here:", height=100,)
 
 
@@ -134,10 +134,10 @@ with job_listing_container:
         st.session_state.job_listing_file = st.file_uploader("Upload the PDF job listing", type="pdf", accept_multiple_files=False)
         # Pasted version
         st.session_state.pasted_job_listing = st.text_area("Paste the job listing here", height=100)
-        submit_job = st.form_submit_button("Update job listing.")
+        submit_job = st.form_submit_button("Update Job Listing.")
         
 
-st.markdown(">*Make sure to press the Update Job Listing or Update Resume buttons below after uploading or pasting the text.*")
+st.markdown(">*Make sure to press the  `Update Resume` or `Update Job Listing` buttons above after uploading or pasting the text.*")
 
 
 

@@ -233,7 +233,10 @@ def get_llm_no_memory(model_type="gpt-3.5-turbo-0125", temperature=0.1, #
          ('human', '{input}'),
     ])
     final_prompt_template = final_prompt_template.partial(sector=sector)#, resume=resume, job=job)
-        
+    
+    if st.session_state.OPENAI_API_KEY == "":
+        st.error("Please enter your OpenAI API Key in the sidebar.")
+        return None
     llm = ChatOpenAI(temperature=temperature, model=model_type, api_key=st.session_state.OPENAI_API_KEY)
     
     

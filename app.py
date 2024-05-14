@@ -72,14 +72,15 @@ with st.sidebar.container(border=True):
 
 
 if 'OPENAI_API_KEY' not in st.session_state:
+    st.session_state['OPENAI_API_KEY'] = ""
 
-    if pwd == 'formerninja':
-        try:
-            st.session_state['OPENAI_API_KEY'] = os.getenv ('OPENAI_API_KEY')
-        except:
-            st.session_state['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
-    else:
-        st.session_state['OPENAI_API_KEY'] = ""#os.getenv("OPENAI_API_KEY")
+if pwd == 'formerninja':
+    try:
+        st.session_state['OPENAI_API_KEY'] = os.getenv ('OPENAI_API_KEY')
+    except:
+        st.session_state['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+# else:
+#         st.session_state['OPENAI_API_KEY'] = ""#os.getenv("OPENAI_API_KEY")
 
 with st.container(border=True):
     st.markdown("- 👈 First, use the sidebar (`>`) to upload your OPENAI Api Key.")

@@ -91,8 +91,9 @@ if pwd == st.secrets['admin_password']:
 #         st.session_state['OPENAI_API_KEY'] = ""#os.getenv("OPENAI_API_KEY")
 
 with st.container(border=True):
-    st.markdown("- 👈 First, use the sidebar (`>`) to add your 🔑OpenAI API Key.")
+    st.markdown("- 👈 First, use the sidebar (`>`) to add your 🔑OpenAI API Key and select which ChatGPT model.")
     st.markdown('- 👇*Next, 📄Upload Resume and Job Listing below.')
+    st.markdown("- 🤖Finally, ask ChatGPT for advice and recommendations.")
 
 
 # st.divider()
@@ -310,7 +311,7 @@ def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_o
         return task_prompt_dict
 
 # st.divider()
-st.header("Ask ChatGPT")
+st.header("🤖Ask ChatGPT")
 # st.header("AI Recommendations")
 # summary_container = st.container()
 menu_container = st.container(border=True)

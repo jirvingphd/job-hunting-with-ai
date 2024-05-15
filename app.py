@@ -70,16 +70,20 @@ with st.sidebar.container(border=True):
 ## OpenAI Model Setting    
 with st.sidebar.container(border=True):
     st.subheader("🔑OpenAI API Key")
-    st.write('> *Enter your OpenAI API key below. You can sign up for one [here](https://platform.openai.com/api-keys).*')
-    st.session_state['OPENAI_API_KEY']  = st.text_input("OpenAI API Key", type="password", value=st.session_state.OPENAI_API_KEY)
-    # with st.sidebar.expander("GPT Model"):
-    # st.write('>*Select a GPT model to use for the analysis.*')
-    model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125"],
-                                index=0)
+    st.write('> *Enter your OpenAI API key below and press the `Submit API Key` button. You can sign up for one [here](https://platform.openai.com/api-keys).*')
     
-    with st.expander("Admin Options", expanded=False):
-        pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password', value="")
-        st.write('For admin password, reset chat after entering the password.')
+    apikey_form = st.form(key='apikey_form')
+    with apikey_form:
+        st.session_state['OPENAI_API_KEY']  = st.text_input("OpenAI API Key", type="password", value=st.session_state.OPENAI_API_KEY)
+        # with st.sidebar.expander("GPT Model"):
+        # st.write('>*Select a GPT model to use for the analysis.*')
+        model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125"],
+                                    index=0)
+    
+        with st.expander("Admin Options", expanded=False):
+            pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password', value="")
+            st.write('For admin password, reset chat after entering the password.')
+        submit_apikey = st.form_submit_button("Submit API Key")
 
 # Admin option to use password to fill API key
 if pwd == st.secrets['admin_password']:

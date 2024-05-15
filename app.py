@@ -9,12 +9,12 @@ from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage, AIMessage
 from langchain.prompts import  MessagesPlaceholder, PromptTemplate, ChatPromptTemplate
 from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferWindowMemory
+# from langchain.memory import ConversationBufferWindowMemory
 import os
 from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 
 
-st.set_page_config(page_title="Resume and Job Listing Analyzer", page_icon="💼")#, layout="wide")
+st.set_page_config(page_title="AI Job Application Assistant", page_icon="💼")#, layout="wide")
 
 def read_pdf(file):
     
@@ -32,8 +32,11 @@ def read_pdf(file):
         # page_obj = pdf_reader.getPage(page_num)
         page_obj = pdf_reader.pages[page_num]
         text += page_obj.extract_text()
+        text += "\n"
     # pdf_file_obj.close()
     return text
+
+
 
 ## Initialize session state
 if 'resume_file' not in st.session_state: 
@@ -45,27 +48,19 @@ if 'resume_text' not in st.session_state:
 if 'job_listing_file' not in st.session_state:    
     st.session_state.job_listing_file = None
 
-if "history" not in st.session_state:
-    st.session_state['history'] = []
 
 if 'job_text' not in st.session_state:
     st.session_state.job_text = None
 
 if 'OPENAI_API_KEY' not in st.session_state:
     st.session_state.OPENAI_API_KEY = ""
-
-# if 'llm' not in st.session_state:
-#     st.session_state.llm = None
-
-st.title('Resume and Job Listing Analyzer')
-
-# c1, c2 = st.columns([.3,.6])
-st.sidebar.image("images/DALLE-2.png", use_column_width=True)
-st.sidebar.markdown("*This app uses ChatGPT to analyze your resume and a job listing to provide tailored advice and recommendations.*")
-# ### HERE
-# if 'OPENAI_API_KEY' not in st.session_state:
-#     st.session_state['OPENAI_API_KEY'] = ""
     
+if "history" not in st.session_state:
+    st.session_state['history'] = []
+
+
+
+## OpenAI Model Setting    
 with st.sidebar.container(border=True):
     st.subheader("🔑OpenAI API Key")
     st.write('> *Enter your OpenAI API key below. You can sign up for one [here](https://platform.openai.com/api-keys).*')
@@ -79,16 +74,27 @@ with st.sidebar.container(border=True):
         pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password', value="")
         st.write('For admin password, reset chat after entering the password.')
 
-
+# Admin option to use password to fill API key
 if pwd == st.secrets['admin_password']:
-    # try:
     st.session_state.OPENAI_API_KEY = st.secrets['MY_OPENAI_API_KEY']
-    # except:
-    #     st.session_state.OPENAI_API_KEY = os.getenv ('OPENAI_API_KEY')
-    
+
+
+## TITLE
+c1, c2 = st.columns([.3,.4])
+with c1:
+    st.container(height=15, border=False)
+    st.image("images/DALLE-2.png", use_column_width=True)
+with c2:
+    st.title('AI Job Application Assistant')
+
+    st.markdown("*This app uses ChatGPT to analyze your resume and a job listing to provide tailored advice and recommendations, including cover letter creation.*")
+
+# ### HERE
+# if 'OPENAI_API_KEY' not in st.session_state:
+#     st.session_state['OPENAI_API_KEY'] = ""
+
+
         
-# else:
-#         st.session_state['OPENAI_API_KEY'] = ""#os.getenv("OPENAI_API_KEY")
 md_instructions = """
 - 👈 **First, open sidebar (`>`) to add your 🔑 OpenAI API Key** and select which ChatGPT model (Default is gpt-4o).
 - 👇**Next, open the menu below to 📄Upload Resume and Job Listing**
@@ -105,9 +111,6 @@ with st.expander("Instructions", expanded=True):
 
 docs_container = st.expander("📄Upload Resume and Job Listing", expanded=False)#border=True)
 with docs_container:
-    # st.markdown('#### Upload Documents')# resume and the job listing to get started')
-    # st.sidebar.header("Resume")
-
     c1, c2 = st.columns([.5,.5])
     c1.markdown("#### Resume")
     resume_container   =    c1.container(border=True)#st.sidebar.container(border=True)
@@ -115,9 +118,7 @@ with docs_container:
     c2.markdown("#### Job Listing")
     # st.sidebar.header("Job Listing")
     job_listing_container = c2.container(border=True)#st.sidebar.container(border=True)
-# st.sidebar.divider()
 
-# st.divider()
 
 ## Upload pdf or paste resume
 with resume_container:
@@ -131,8 +132,6 @@ with resume_container:
         submit_resume = st.form_submit_button("Update Resume")
     # st.session_state.pasted_resume = st.text_area("or paste your resume here:", height=100,)
 
-
-
 ## Upload pdf or past job listing    
 with job_listing_container:
     job_form =st.form(key='job_form', border=False)
@@ -145,12 +144,8 @@ with job_listing_container:
         submit_job = st.form_submit_button("Update Job Listing.")
         
 
-
-
-
 ## Set resume text
 def get_resume_text():
-    
     if st.session_state.pasted_resume != '':
         st.session_state.resume_text = st.session_state.pasted_resume
     elif st.session_state.resume_file is not None:
@@ -160,14 +155,6 @@ def get_resume_text():
         
 if submit_resume:
     get_resume_text()
-    # if st.session_state.pasted_resume is not None:
-    #     st.session_state.resume_text = st.session_state.pasted_resume
-    # elif st.session_state.resume_file is not None:
-    #     st.session_state.resume_text = read_pdf(st.session_state.resume_file) 
-    # else:
-    #     st.error("Please upload a resume or paste it in the text area.")
-    # else:  
-        # st.session_state.resume_text = None
 
 
 ## set job listing text
@@ -178,19 +165,11 @@ def get_job_text():
         st.session_state.job_text = read_pdf(st.session_state.job_listing_file)
     else:
         st.error("Please upload a job listing or paste it in the text area.")
-        # st.session_state.job_text = None
+        
 if submit_job:
     get_job_text()
-    # if st.session_state.job_listing_file:
-    #     st.session_state.job_text = read_pdf(st.session_state.job_listing_file)
-    # elif st.session_state.pasted_job_listing:
-    #     st.session_state.job_text = st.session_state.pasted_job_listing
-    # else:
-    #     st.error("Please upload a job listing or paste it in the text area.")
-    #     # st.session_state.job_text = None
-# else:
-#     st.session_state.job_text = ''
-
+    
+    
 
 
 # def get_template_string():
@@ -238,7 +217,6 @@ def get_llm_no_memory(model_type="gpt-3.5-turbo-0125", temperature=0.1, #
         
     llm = ChatOpenAI(temperature=temperature, model=model_type, api_key=st.session_state.OPENAI_API_KEY)
     
-    
     llm_chain = final_prompt_template | llm | StrOutputParser(output_key="response")
     # llm_chain = ConversationChain(prompt=final_prompt_template, 
     #                               llm=llm, 
@@ -261,7 +239,7 @@ def fake_streaming(response):
             
 
 
-## TO DO: Re-create the llm for each response
+## Previous non-stremeing version
 def get_response(llm_no_mem, input, resume='', job='', history=[]):
     
     if llm_no_mem is None:
@@ -272,11 +250,6 @@ def get_response(llm_no_mem, input, resume='', job='', history=[]):
                    'job':job,
                    'history':history,})
 
-    # response = llm_no_mem.invoke({"resume":resume,
-    #                               "job":job,
-    #                               'input':input_text,
-    #                               'history':history})
-    
     if isinstance(output, dict):
         response = output['response']
     else:
@@ -285,33 +258,42 @@ def get_response(llm_no_mem, input, resume='', job='', history=[]):
     history.append(AIMessage(response))
     return response, history
     
+
+def stream_response(llm_no_mem, input, resume='', job='', history=[]):
     
+    if llm_no_mem is None:
+        llm_no_mem = get_llm_no_memory(model_type=model_type,)
+
+    ## Add input to history
+    history.append(HumanMessage(content=input))
+
+    return llm_no_mem.stream({'input':input,
+                   'resume':resume,
+                   'job':job,
+                   'history':history,})
+
         
 ## For steramlit try this as raw code, not a function
 def print_history(llm_chain):
-    # Simulate streaming for final message
+    
+    ## Get history from llm_chain
     if isinstance(llm_chain, ConversationChain):
         session_state_messages = llm_chain.memory.buffer_as_messages
     elif isinstance(llm_chain, list):
         session_state_messages = llm_chain
     else:
         session_state_messages=[]
-        
+    
+    # Display history
     for msg in session_state_messages:
         if isinstance(msg, AIMessage):
-            # notebook
-            # streamlit
             st.chat_message("assistant", avatar=ai_avatar).write(msg.content)
         
         elif isinstance(msg, HumanMessage):
-            # notebook
-            # print(f"User: {msg.content}")
-            # streamlit
             st.chat_message("user", avatar=user_avatar).write(msg.content)
-        print()
 
 
-
+## Get task options from config.json  and remove deprecated
 def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_only=False, remove_dep=True):
     with open(prompt_config_file, 'r') as f:
         task_prompt_dict = json.load(f)
@@ -322,15 +304,17 @@ def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_o
         return list(task_prompt_dict.keys())
     else:
         return task_prompt_dict
+task_options  = get_task_options(options_only=False)
 
-# st.divider()
+
+##Chat Interface
 st.header("🤖Ask ChatGPT")
-# st.header("AI Recommendations")
-# summary_container = st.container()
+
+## Chat Containers
 menu_container = st.container(border=True)
 
+
 chat_container = st.container()
-# chat_container.header("Q&A")
 output_container = chat_container.container(border=True, height=300)
 user_text = chat_container.chat_input(placeholder="Enter your question here.")
 
@@ -338,28 +322,16 @@ ai_avatar  = "🤖"
 user_avatar = "💬"
 
 
-## CHANGE CODE TO ADD HUMAN/AI MESSAGE to empty history
-# Specify task options
-# task_options = get_task_options(options_only=True) #task_prompt_dict.keys()
-task_options  = get_task_options(options_only=False)
-
-
+## Menu of pre-defined tasks
 with menu_container:
     st.markdown("> *Select a task and click `Get Response`, or enter your own question below the chat window to get started.*")
-
-    ## Select summary or recommendation
-    # col1,col2,col3 = st.columns([.4,.3,.3])#3)
     col1,col2 = st.columns([.6,.4])
-    # show_summary = col1.button("Show Summary of Customer Sentiment")
-    # show_recommendations = col1.button("Get product improvement recommendations",)
-    # show_marketing_recs = col2.button("Get marketing recommendations.")
     selected_task = col1.radio("Select task:", options=task_options.keys())
     col2.markdown("> *Click below to query ChatGPT*")
     get_answer_with_context = col2.button("Get response.")
 
-    # reset_button2 = col3.button("Reset Chat?", key='reset 2')
 
-# st.divider()
+## Chat Histort Options (Download or Reset)
 st.markdown("### Chat History")
 sub_chat_menu = st.container(border=True)
 with sub_chat_menu:
@@ -369,9 +341,8 @@ with sub_chat_menu:
     reset_button2 = scm_col2.button("Reset Chat?", key='reset 2')
 
 reset_button1 = st.sidebar.button("Reset Chat?")
-if ('llm' not in st.session_state) or reset_button1 or reset_button2:
-    # agent = get_agent(retriever)
-    # with output_container:
+if reset_button1 or reset_button2:
+
     st.session_state['history'] = []
     # get_job_text()
     # get_resume_text()
@@ -381,30 +352,47 @@ if ('llm' not in st.session_state) or reset_button1 or reset_button2:
         st.session_state['llm'] = get_llm_no_memory(model_type=model_type,)#reset_agent(retriever=retriever)#st.session_state['retriever'] )
 
 
-# with chat_container:
-# output_container = st.container(border=True)
+with open("app-assets/author-info.md") as f:
+    author_info = f.read()
+# st.sidebar.divider()
+with st.sidebar.container(border=True):
+    # st.subheader("Author Information")
+    st.markdown(author_info, unsafe_allow_html=True)
+
+
+## Chat Output display
 with output_container:
         
-    print_history(st.session_state['history'])#st.session_state['llm'])
+    print_history(st.session_state.history)#st.session_state['llm'])
     if get_answer_with_context:
         user_text = task_options[selected_task]
         
     if user_text is not None:
         st.chat_message("user", avatar=user_avatar).write(user_text)
-
-        response, history = get_response(None,#st.session_state['llm'],
-                                         input=user_text,
-                                         resume=st.session_state.resume_text,
-                                         job = st.session_state.job_text,
-                                         history=st.session_state['history'])
-        st.session_state['history']  = history
-        # response = st.session_state['llm'].invoke({"input":user_text})
-        st.chat_message('assistant', avatar=ai_avatar).write(fake_streaming(response))#response['response']))
+        
+        with st.chat_message('assistant', avatar=ai_avatar):
+            response = st.write_stream(stream_response(None, 
+                                                    input=user_text,
+                                                    history=st.session_state.history,
+                                                    resume=st.session_state.resume_text,
+                                                    job = st.session_state.job_text,
+                                                    ))
+        
+        st.session_state.history.append(AIMessage(response))
+        
+        ## Old non-streaming way
+        # response, history = get_response(None,#st.session_state['llm'],
+        #                                  input=user_text,
+        #                                  resume=st.session_state.resume_text,
+        #                                  job = st.session_state.job_text,
+        #                                  history=st.session_state['history'])
+        # st.session_state['history']  = history
+        # # response = st.session_state['llm'].invoke({"input":user_text})
+        # st.chat_message('assistant', avatar=ai_avatar).write(fake_streaming(response))#response['response']))
 
 
     
 def download_history(include_docs=True):
-        
     avatar_dict = {'human': user_avatar,
                    'ai':ai_avatar,
                    'SystemMessage':"💻"}
@@ -416,7 +404,8 @@ def download_history(include_docs=True):
         type_message = msg.type#type(msg) x
             # with st.chat_message(name=i["role"],avatar=avatar_dict[ i['role']]):
         md_history.append(f"{avatar_dict[type_message]}: {msg.content}")
-        
+    
+    # Include the resume and job listing
     if include_docs:
         md_history.append("___")
         md_history.append("### Documents Used:")
@@ -424,10 +413,7 @@ def download_history(include_docs=True):
         md_history.append(f'- Job Listing:\n{st.session_state.job_text}')
     
     return "\n\n".join(md_history)
-    # if submit_button:
     
-# chat_options.markdown("**Clear conversation history.**")
 
-# reset_button  = chat_options.button("Clear",on_click=reset)
 scm_col1.markdown("> *Click below to download chat history.*")
 scm_col1.download_button("📥Download history?", file_name="chat-history.txt", data=download_history())#data=json.dumps(st.session_state['history']))

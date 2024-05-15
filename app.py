@@ -172,15 +172,6 @@ if submit_job:
     
 
 
-# def get_template_string():
-    
-#     return """You are a a specialized career coach for the data science and analytics sector, focused on delivering tailored, concise job application advice. 
-#     You are proficient in resume analysis, cover letter guidance, and interview preparation, adapting to each user's unique requirements.
-#     When analyzing a resume vs. a job listing, start by categorizing a user's fit for a job as 'perfect,' 'great,' 'good,' or 'non-ideal' based on the resume and job listing comparison before going into detail.
-#     You maintain a professional, friendly tone, and encouraging tone, ensuring advice is efficient, clear, and easily understandable, with the goal of enhancing user confidence and aiding their career progression.
-#     """
-
-
 def get_system_prompt_str():
     """Helper function for get_prompt_template. New v2.0"""
     system_prompt = (" You are a a specialized career coach for the {sector}, focused on delivering tailored, concise job application advice and practice. " 
@@ -210,10 +201,7 @@ def get_llm_no_memory(model_type="gpt-3.5-turbo-0125", temperature=0.1, #
          ('human', '{input}'),
     ])
     final_prompt_template = final_prompt_template.partial(sector=sector)#, resume=resume, job=job)
-    
-    # if st.session_state.OPENAI_API_KEY == "":
-    #     st.error("Please enter your OpenAI API Key in the sidebar.")
-    #     # return None
+
         
     llm = ChatOpenAI(temperature=temperature, model=model_type, api_key=st.session_state.OPENAI_API_KEY)
     
@@ -308,12 +296,12 @@ def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_o
 task_options  = get_task_options(options_only=False)
 
 
+
 ##Chat Interface
 st.header("🤖Ask ChatGPT")
 
 ## Chat Containers
 menu_container = st.container(border=True)
-
 
 chat_container = st.container()
 output_container = chat_container.container(border=True, height=300)
@@ -343,14 +331,11 @@ with sub_chat_menu:
 
 reset_button1 = st.sidebar.button("Reset Chat?")
 if reset_button1 or reset_button2:
-
     st.session_state['history'] = []
-    # get_job_text()
-    # get_resume_text()
-    if st.session_state.OPENAI_API_KEY == "":
-        st.error("Please enter your OpenAI API Key in the sidebar.")
-    else:
-        st.session_state['llm'] = get_llm_no_memory(model_type=model_type,)#reset_agent(retriever=retriever)#st.session_state['retriever'] )
+    # if st.session_state.OPENAI_API_KEY == "":
+    #     st.error("Please enter your OpenAI API Key in the sidebar.")
+    # else:
+    #     st.session_state['llm'] = get_llm_no_memory(model_type=model_type,)#reset_agent(retriever=retriever)#st.session_state['retriever'] )
 
 
 with open("app-assets/author-info.md") as f:

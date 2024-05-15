@@ -241,7 +241,7 @@ def fake_streaming(response):
 
 ## Previous non-stremeing version
 def get_response(llm_no_mem, input, resume='', job='', history=[]):
-    
+    """Deprecated funciton. Use stream_response instead."""
     if llm_no_mem is None:
         llm_no_mem = get_llm_no_memory(model_type=model_type,)
     
@@ -260,7 +260,7 @@ def get_response(llm_no_mem, input, resume='', job='', history=[]):
     
 
 def stream_response(llm_no_mem, input, resume='', job='', history=[]):
-    
+    """Stream response from ChatGPT. Version 2.0."""
     if llm_no_mem is None:
         llm_no_mem = get_llm_no_memory(model_type=model_type,)
 
@@ -283,6 +283,7 @@ def print_history(llm_chain):
         session_state_messages = llm_chain
     else:
         session_state_messages=[]
+    
     
     # Display history
     for msg in session_state_messages:
@@ -368,18 +369,23 @@ with output_container:
         user_text = task_options[selected_task]
         
     if user_text is not None:
+
         st.chat_message("user", avatar=user_avatar).write(user_text)
         
-        with st.chat_message('assistant', avatar=ai_avatar):
-            response = st.write_stream(stream_response(None, 
-                                                    input=user_text,
-                                                    history=st.session_state.history,
-                                                    resume=st.session_state.resume_text,
-                                                    job = st.session_state.job_text,
-                                                    ))
-        
-        st.session_state.history.append(AIMessage(response))
-        
+        if st.session_state.OPENAI_API_KEY == "":
+            st.chat_message("SystemMessage", avatar="💻").write_stream(fake_streaming("🚨Error: Please enter your 🔑OpenAI API Key in the sidebar."))
+        else:    
+                        
+            with st.chat_message('assistant', avatar=ai_avatar):
+                response = st.write_stream(stream_response(None, 
+                                                        input=user_text,
+                                                        history=st.session_state.history,
+                                                        resume=st.session_state.resume_text,
+                                                        job = st.session_state.job_text,
+                                                        ))
+            
+            st.session_state.history.append(AIMessage(response))
+            
         ## Old non-streaming way
         # response, history = get_response(None,#st.session_state['llm'],
         #                                  input=user_text,

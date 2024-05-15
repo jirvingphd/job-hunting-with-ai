@@ -189,7 +189,7 @@ def get_system_prompt_str():
     return system_prompt + context
 
 
-def get_llm_no_memory(model_type="gpt-3.5-turbo-0125", temperature=0.1, #
+def get_llm_no_memory(model_type="gpt-4o", temperature=0.1, #
             system_prompt_template_func= get_system_prompt_str,#verbose=False,
              verbose=True, sector="data science and analytics"):#, resume='', job=''):
     """Version 2.0"""

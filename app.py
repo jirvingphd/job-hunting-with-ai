@@ -59,6 +59,13 @@ if "history" not in st.session_state:
     st.session_state['history'] = []
 
 
+with open("app-assets/author-info.md") as f:
+    author_info = f.read()
+# st.sidebar.divider()
+with st.sidebar.container(border=True):
+    # st.subheader("Author Information")
+    st.markdown(author_info, unsafe_allow_html=True)
+
 
 ## OpenAI Model Setting    
 with st.sidebar.container(border=True):
@@ -337,13 +344,6 @@ if reset_button1 or reset_button2:
     # else:
     #     st.session_state['llm'] = get_llm_no_memory(model_type=model_type,)#reset_agent(retriever=retriever)#st.session_state['retriever'] )
 
-
-with open("app-assets/author-info.md") as f:
-    author_info = f.read()
-# st.sidebar.divider()
-with st.sidebar.container(border=True):
-    # st.subheader("Author Information")
-    st.markdown(author_info, unsafe_allow_html=True)
 
 
 ## Chat Output display

@@ -74,7 +74,7 @@ with st.sidebar.container(border=True):
     st.session_state['OPENAI_API_KEY']  = st.text_input("OpenAI API Key", type="password", value=st.session_state.OPENAI_API_KEY)
     # with st.sidebar.expander("GPT Model"):
     # st.write('>*Select a GPT model to use for the analysis.*')
-    model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125", "gpt-3.5-turbo-instruct",],
+    model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125"],
                                 index=0)
     
     with st.expander("Admin Options", expanded=False):

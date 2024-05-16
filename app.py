@@ -79,7 +79,8 @@ with st.sidebar.container(border=True):
         # st.write('>*Select a GPT model to use for the analysis.*')
         model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125"],
                                     index=0)
-    
+        model_tone = st.selectbox("*Select a tone for the model.*", options=['friendly and encouraging','professional and concise','cutt-throat and direct'],
+                                    index=0)    
         with st.expander("Admin Options", expanded=False):
             pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password', value="")
             st.write('For admin password, reset chat after entering the password.')
@@ -187,14 +188,15 @@ def get_system_prompt_str():
     """Helper function for get_prompt_template. New v2.0"""
     system_prompt = (" You are a a specialized career coach for the {sector}, focused on delivering tailored, concise job application advice and practice. " 
     " You are proficient in resume analysis, cover letter guidance, and interview preparation, adapting to each user's unique requirements. "
-    " You maintain a professional, friendly tone, and encouraging tone, ensuring advice is efficient, clear, and easily understandable, "
+    " You maintain a professional, {model_tone} tone, ensuring advice is efficient, clear, and easily understandable, "
     " with the goal of aiding their career progression. Ask the user for their resume and job listing if not provided and they are needed to asnwer .")
     context = "\nUse the following context, if provided, to help answer the questions:\n\nHere is my resume:\n-------------\n {resume}\n\n Here is the job listing:\n-------------\n{job}\n\n "    
     return system_prompt + context
 
 
-def get_llm_no_memory(model_type="gpt-4o", temperature=0.1, #
+def get_llm_no_memory(model_type=model_type, temperature=0.1, #
             system_prompt_template_func= get_system_prompt_str,#verbose=False,
+            model_tone=model_tone,
              verbose=True, sector="data science and analytics"):#, resume='', job=''):
     """Version 2.0"""
     # ## get prompt string
@@ -211,7 +213,8 @@ def get_llm_no_memory(model_type="gpt-4o", temperature=0.1, #
          MessagesPlaceholder(variable_name='history', optional=True),
          ('human', '{input}'),
     ])
-    final_prompt_template = final_prompt_template.partial(sector=sector)#, resume=resume, job=job)
+    final_prompt_template = final_prompt_template.partial(sector=sector,
+                                                          model_tone=model_tone)#, resume=resume, job=job)
 
         
     llm = ChatOpenAI(temperature=temperature, model=model_type, api_key=st.session_state.OPENAI_API_KEY)
@@ -261,7 +264,8 @@ def get_response(llm_no_mem, input, resume='', job='', history=[]):
 def stream_response(llm_no_mem, input, resume='', job='', history=[]):
     """Stream response from ChatGPT. Version 2.0."""
     if llm_no_mem is None:
-        llm_no_mem = get_llm_no_memory(model_type=model_type,)
+        llm_no_mem = get_llm_no_memory(model_type=model_type,
+                                       model_tone=model_tone, sector="data science and analytics")
 
     ## Add input to history
     history.append(HumanMessage(content=input))

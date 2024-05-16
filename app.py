@@ -67,28 +67,28 @@ with st.sidebar.container(border=True):
     st.markdown(author_info, unsafe_allow_html=True)
 
 
-## OpenAI Model Setting    
-with st.sidebar.container(border=True):
-    st.subheader("🔑OpenAI API Key")
-    st.write('> *Enter your OpenAI API key below and press the `Submit API Key` button. You can sign up for one [here](https://platform.openai.com/api-keys).*')
+# ## OpenAI Model Setting    
+# with st.sidebar.container(border=True):
+#     st.subheader("🔑OpenAI API Key")
+#     st.write('> *Enter your OpenAI API key below and press the `Submit API Key` button. You can sign up for one [here](https://platform.openai.com/api-keys).*')
     
-    apikey_form = st.form(key='apikey_form')
-    with apikey_form:
-        st.session_state['OPENAI_API_KEY']  = st.text_input("OpenAI API Key", type="password", value=st.session_state.OPENAI_API_KEY)
-        # with st.sidebar.expander("GPT Model"):
-        # st.write('>*Select a GPT model to use for the analysis.*')
-        model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125"],
-                                    index=0)
-        model_tone = st.selectbox("*Select a tone for the model.*", options=['friendly and encouraging','professional and concise','cutt-throat and direct'],
-                                    index=0)    
-        with st.expander("Admin Options", expanded=False):
-            pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password', value="")
-            st.write('For admin password, reset chat after entering the password.')
-        submit_apikey = st.form_submit_button("Submit API Key")
+#     apikey_form = st.form(key='apikey_form')
+#     with apikey_form:
+#         st.session_state['OPENAI_API_KEY']  = st.text_input("OpenAI API Key", type="password", value=st.session_state.OPENAI_API_KEY)
+#         # with st.sidebar.expander("GPT Model"):
+#         # st.write('>*Select a GPT model to use for the analysis.*')
+#         model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125"],
+#                                     index=0)
+#         model_tone = st.selectbox("*Select a tone for the model.*", options=['friendly and encouraging','professional and concise','cutt-throat and direct'],
+#                                     index=0)    
+#         with st.expander("Admin Options", expanded=False):
+#             pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password', value="")
+#             st.write('For admin password, reset chat after entering the password.')
+#         submit_apikey = st.form_submit_button("Submit API Key")
 
-# Admin option to use password to fill API key
-if pwd == st.secrets['admin_password']:
-    st.session_state.OPENAI_API_KEY = st.secrets['MY_OPENAI_API_KEY']
+# # Admin option to use password to fill API key
+# if pwd == st.secrets['admin_password']:
+#     st.session_state.OPENAI_API_KEY = st.secrets['MY_OPENAI_API_KEY']
 
 
 ## TITLE
@@ -194,9 +194,9 @@ def get_system_prompt_str():
     return system_prompt + context
 
 
-def get_llm_no_memory(model_type=model_type, temperature=0.1, #
+def get_llm_no_memory(model_type='gpt-4o', temperature=0.1, #
             system_prompt_template_func= get_system_prompt_str,#verbose=False,
-            model_tone=model_tone,
+            model_tone='friendly and encouraging',
              verbose=True, sector="data science and analytics"):#, resume='', job=''):
     """Version 2.0"""
     # ## get prompt string
@@ -296,20 +296,50 @@ def print_history(llm_chain):
         elif isinstance(msg, HumanMessage):
             st.chat_message("user", avatar=user_avatar).write(msg.content)
 
-
-## Get task options from config.json  and remove deprecated
 def get_task_options(prompt_config_file = "config/prompt_config.json" ,options_only=False, remove_dep=True):
     with open(prompt_config_file, 'r') as f:
-        task_prompt_dict = json.load(f)
-        
-    if remove_dep:
-        task_prompt_dict = {k:v for k,v in task_prompt_dict.items() if  "DEP" not in k}
-    if options_only:
-        return list(task_prompt_dict.keys())
-    else:
-        return task_prompt_dict
-task_options  = get_task_options(options_only=False)
+        task_prompt_data = json.load(f)
+    
+    # Check if the loaded data is a list
+    if isinstance(task_prompt_data, list):
+        return task_prompt_data
 
+    # If it's not a list, assume it's a dictionary and proceed as before
+    if remove_dep:
+        task_prompt_data = {k:v for k,v in task_prompt_data.items() if  "DEP" not in k}
+    if options_only:
+        return list(task_prompt_data.keys())
+    else:
+        return task_prompt_data
+
+    
+# Settong task and tone    
+task_options  = get_task_options(prompt_config_file='config/prompt_config.json', options_only=False)
+tone_options  = get_task_options(prompt_config_file="config/tone_config.json", options_only=False, remove_dep=False)
+
+## OpenAI Model Setting    
+with st.sidebar.container(border=True):
+    st.subheader("🔑OpenAI API Key")
+    st.write('> *Enter your OpenAI API key below and press the `Submit API Key` button. You can sign up for one [here](https://platform.openai.com/api-keys).*')
+    
+    apikey_form = st.form(key='apikey_form')
+    with apikey_form:
+        st.session_state['OPENAI_API_KEY']  = st.text_input("OpenAI API Key", type="password", value=st.session_state.OPENAI_API_KEY)
+        # with st.sidebar.expander("GPT Model"):
+        # st.write('>*Select a GPT model to use for the analysis.*')
+
+        model_tone = st.selectbox("*Select a tone for the model.*", options=tone_options,
+                                    index=0)    
+        model_type = st.selectbox("*Select a GPT model to use for the analysis.*", options=['gpt-4o',"gpt-4-turbo","gpt-3.5-turbo-0125"],
+                                    index=0)
+        with st.expander("Admin Options", expanded=False):
+            pwd = st.text_input('***(Admin Only)** Input password to fill API key*', type='password', value="")
+            st.write('For admin password, reset chat after entering the password.')
+        submit_apikey = st.form_submit_button("Submit API Key")
+
+# Admin option to use password to fill API key
+if pwd == st.secrets['admin_password']:
+    st.session_state.OPENAI_API_KEY = st.secrets['MY_OPENAI_API_KEY']
 
 
 ##Chat Interface
@@ -319,7 +349,7 @@ st.header("🤖Ask ChatGPT")
 menu_container = st.container(border=True)
 
 chat_container = st.container()
-output_container = chat_container.container(border=True, height=300)
+output_container = chat_container.container(border=True, height=400)
 user_text = chat_container.chat_input(placeholder="Enter your question here.")
 
 ai_avatar  = "🤖"
@@ -330,8 +360,16 @@ user_avatar = "💬"
 with menu_container:
     st.markdown("> *Select a task and click `Get Response`, or enter your own question below the chat window to get started.*")
     col1,col2 = st.columns([.6,.4])
-    selected_task = col1.radio("Select task:", options=task_options.keys())
-    col2.markdown("> *Click below to query ChatGPT*")
+    
+    with col1:
+        selected_task = st.radio("Select task:", options=task_options.keys())
+        # selected_task= st.selectbox("Select task:", options=task_options.keys(), index=0)
+        # model_tone = st.selectbox("*Select a tone for the model.*", options=tone_options,
+        #                             index=0)        
+    with col2:
+
+        st.markdown("> *Click below to query ChatGPT*")
+
     get_answer_with_context = col2.button("Get response.")
 
 

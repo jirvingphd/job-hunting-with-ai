@@ -21,6 +21,7 @@
 1. Have ChatGPT generate ~3-5 onet job titles that are similar to the job application and https://github.com/onetcenter/web-services-samples/blob/master/python-3/batch_coder.py
 2. Feed the list of titles into the OnetWebService's .call:
 
+- Example use
 ```python
 # SOURCE: https://github.com/onetcenter/web-services-samples/blob/master/python-3/batch_coder.py
 #!python3

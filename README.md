@@ -15,6 +15,12 @@
     - [ ] Review Code Examples: https://github.com/onetcenter/web-services-samples
 
 
+- 05/20/24:
+- [ ] Add instructions for constructing follow-up prompts (or really once you've added your PDFs).
+    - [ ] $$$$ pay wall??
+    
+
+
 ### Brainstorming
 
 >Integrating RAG with ONET database

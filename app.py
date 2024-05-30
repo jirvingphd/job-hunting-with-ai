@@ -70,6 +70,9 @@ md_instructions = """
 
 
 - (Optional) 📥*Download the chat history at the end of the session.*
+
+- 📺 Video Walkthrough: https://youtu.be/CZrarP5_6Rw
+
 """
 with st.expander("Instructions", expanded=True):
     st.markdown(md_instructions)
